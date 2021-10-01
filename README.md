@@ -1,4 +1,4 @@
-# PIRSensorReliability
+# PIRMedic
 Repository containing code for reliability in PIR sensors accepted to ACM BuildSys 2021.
 
 dataset/ contains the data collected.
