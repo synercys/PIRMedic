@@ -1,11 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My GitHub Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PIRMedic: Fault Diagnosis for PIR Sensors</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #004080;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    pre {
+      background: #eee;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    figure {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    figcaption {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to My GitHub Page</h1>
-  <p>This is a placeholder page for GitHub Pages.</p>
+  <div class="container">
+    <h1>PIRMedic: A Physics-based Fault Diagnosis for Passive Infra-Red (PIR) Sensors</h1>
+
+    <p><strong>Authors:</strong> Ashish Kashinath, Sibin Mohan, Akshay Nambi, Sumukh Marathe</p>
+    <p><strong>Conference:</strong> ACM BuildSys 2021 – <em>Best Paper Award</em></p>
+
+    <p>
+      <a href="https://sibin.github.io/papers/2021_BuildSys_PIRMedic_AshishKashinath.pdf" target="_blank">📄 Download the Paper (PDF)</a>
+    </p>
+
+    <h2>📌 Summary</h2>
+    <p>
+      PIRMedic is a physics-based method to detect and diagnose faults in Passive Infra-Red (PIR) sensors used in smart building occupancy systems.
+      It improves reliability by examining the physical principles (like the pyroelectric effect) instead of relying purely on data-driven inference.
+    </p>
+
+    <h2>🧠 Motivation</h2>
+    <p>
+      PIR sensors are integral to smart building systems due to their cost-effectiveness and privacy-preserving nature. However, they are susceptible to various failures, such as environmental degradation, incorrect installation, and component aging, leading to unreliable occupancy data. Traditional fault detection methods often rely on data-driven approaches, which may not effectively capture the underlying physical anomalies.
+    </p>
+
+    <h2>🔬 Key Contributions</h2>
+    <ul>
+      <li><strong>Physics-based Fault Diagnosis:</strong> PIRMedic introduces a method that utilizes the physical characteristics of PIR sensors, specifically the pyroelectric effect, to detect and diagnose faults.</li>
+      <li><strong>Edge-level Implementation:</strong> The approach captures voltage and current behaviors at the sensor hardware level, enabling real-time fault detection at the edge, reducing the need for extensive data transmission.</li>
+      <li><strong>Improved Data Quality:</strong> By ensuring the reliability of occupancy data, PIRMedic enhances the performance of building automation systems, leading to better energy efficiency and occupant comfort.</li>
+    </ul>
+
+    <h2>📊 Key Results</h2>
+    <p>
+      PIRMedic achieved high accuracy in detecting and diagnosing various classes of PIR sensor faults. The approach was evaluated using real-world deployments in three distinct locations, demonstrating its effectiveness in diverse environments.
+    </p>
+
+    <figure>
+      <img src="figures/fig1_architecture.png" alt="PIRMedic System Architecture">
+      <figcaption><strong>Figure 1:</strong> Overview of the PIRMedic system architecture.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="figures/fig5_accuracy.png" alt="Classification Accuracy">
+      <figcaption><strong>Figure 5:</strong> Classification accuracy for different fault types.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="figures/fig7_deployments.png" alt="Deployment Locations">
+      <figcaption><strong>Figure 7:</strong> Deployment locations: Elevator, Lobby, and Starbucks.</figcaption>
+    </figure>
+
+    <h2>📚 Citation</h2>
+    
+    <pre>
+@inproceedings{pirmedic2021,
+  title={PIRMedic: A Physics-based Fault Diagnosis for Passive Infra-Red (PIR) Sensors},
+  author={Kashinath, Ashish and Mohan, Sibin and Nambi, Akshay and Marathe, Sumukh},
+  booktitle={Proceedings of the 8th ACM International Conference on Systems for Energy-Efficient Built Environments},
+  year={2021},
+  organization={ACM}
+}
+    </pre>
+
+    <h2>🔗 Additional Resources</h2>
+    <ul>
+      <li><a href="https://www.microsoft.com/en-us/research/publication/pirmedic-a-physics-based-fault-diagnosis-for-passive-infra-red-pir-sensors/" target="_blank">Microsoft Research Publication</a></li>
+      <li><a href="https://buildsys.acm.org/2021/" target="_blank">BuildSys 2021 Conference</a></li>
+    </ul>
+
+    <footer>
+     Hosted via GitHub Pages.
+    </footer>
+  </div>
 </body>
 </html>
