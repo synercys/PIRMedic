@@ -1,13 +1,63 @@
-# PIRMedic
-Repository containing code for reliability in PIR sensors accepted to ACM BuildSys 2021.
+# 🩺 PIRMedic
 
-dataset/ contains the data collected.
-- FaultDetection/faulty_vs_working.csv : contains a mix of Aout from working and faulty sensors
-- FaultDetectionFeatures/ : contains the extracted FFT, FFT-based features used to perform the classification between working and faulty sensors
-- FineGrainedFaultAnalysis/ : contains Aout from different Class III faulty sensors (some of which are covered with paper, some with tape and some with dust)
-- FineGrainedFaultAnalysisFeatures/ : contains the extracted FFT and FFT-based features used to perform the diagnosis for Class III faults
-- deployments/ : contains the data (both raw and processed) from elevator, lobby and starbucks
+> **Reliability Analysis in PIR Sensors**  
+> 📄 Accepted at **ACM BuildSys 2021**
 
-notebooks/ contains the different jupyter notebooks
-- FaultDetection/ : are the different fault detection implementations i.e., separate between faulty and working sensors
-- FineGrainedFaultAnalysis/ : are the different class III faults i.e., find out whether it is paper, tape or dust that caused the class III fault
+---
+
+## 📁 Repository Overview
+
+This repository contains the code, data, and notebooks used to analyze and diagnose faults in PIR sensors.
+
+---
+
+## 📦 Directory Structure
+
+<details>
+<summary><strong>📊 <code>dataset/</code></strong> — Raw & Processed Data</summary>
+
+| Path | Description |
+|------|-------------|
+| `FaultDetection/faulty_vs_working.csv` | Mixed dataset of `Aout` signals from working and faulty sensors |
+| `FaultDetectionFeatures/` | Extracted FFT and FFT-based features for classifying sensor health |
+| `FineGrainedFaultAnalysis/` | `Aout` signals from Class III faulty sensors: paper, tape, and dust |
+| `FineGrainedFaultAnalysisFeatures/` | FFT-based features for diagnosing specific Class III fault types |
+| `deployments/` | Data (raw and processed) from real-world deployments:<br>📍 *Elevator*, *Lobby*, *Starbucks* |
+</details>
+
+<details>
+<summary><strong>📓 <code>notebooks/</code></strong> — Jupyter Notebooks</summary>
+
+| Folder | Purpose |
+|--------|---------|
+| `FaultDetection/` | Notebooks for detecting faulty vs. working sensors |
+| `FineGrainedFaultAnalysis/` | Notebooks for diagnosing Class III faults (paper, tape, dust) |
+</details>
+
+---
+
+## 📌 Highlights
+
+- ✅ Real-world PIR sensor fault data
+- ⚙️ FFT and machine learning-based feature extraction
+- 🔍 Fine-grained fault classification for Class III anomalies
+- 📈 Includes deployment data from varied environments
+
+---
+
+## 📚 Citation
+
+If you use this repository, please cite the corresponding paper from **ACM BuildSys 2021**.  
+*(Add BibTeX entry here if needed.)*
+
+---
+
+## 🛠️ Getting Started
+
+To explore the data and run the notebooks:
+
+```bash
+git clone https://github.com/your-org/PIRMedic.git
+cd PIRMedic/notebooks/FaultDetection
+jupyter notebook
+```
