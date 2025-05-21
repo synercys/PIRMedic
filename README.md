@@ -1,10 +1,5 @@
 # 🩺 PIRMedic
 
-> **Reliability Analysis in PIR Sensors**  
-> 📄 Accepted at **ACM BuildSys 2021**
-
----
-
 ## 📁 Repository Overview
 
 This repository contains the code, data, and notebooks used to analyze and diagnose faults in PIR sensors.
