@@ -1,0 +1,187 @@
+\section{Related Work} 
+\label{sec:related}
+
+%\hl{moved this section here and renamed it -- Sibin.}
+
+%\section{Sensor Reliability : State of the Art}
+%% BEGINNING OUTLINE 
+% Current research in PIR sensors can be categorized into:
+% \begin{itemize}
+%     \item Time-series fault detection
+%     \item PIR-specific related work
+%     \item $A_{out}$ based PIR work
+%     \item $A_{out}$ extended for fault detection
+% \end{itemize}
+%% END OF OUTLINE
+
+\begin{comment}
+\begin{table*}
+	\centering
+	%\hrulefill
+	\caption{Overview of related work in the space of sensor fault detection}
+	%\resizebox{\textwidth}{!}{
+	\begin{tabular}{p{2cm} | p{2.5cm}p{4cm}p{1cm}p{3cm}p{3cm}}
+		%\begin{tabular}{p{1.25cm}p{1cm}p{1.5cm}p{1.5cm}p{1cm}}
+		\hline
+		\bfseries \textsc{State of the Art} & 
+		\bfseries \textsc{Approach} & 
+		\bfseries \textsc{Remarks} & 
+		\bfseries \textsc{Cost} & 
+		\bfseries \textsc{Practicality} & 
+		\bfseries \textsc{Notes} \\
+		\hline \hline
+		
+		\rowcolor{gray!20} Khalastchi~\etal~\cite{} & 
+		Data-driven + Model-based & 
+		Requires suspicious patterns capturing the correlation of sensors. Applies to only stuck/drift faults. & 
+		Moderate & 
+		Shown on a single system &
+		DS/ML \\
+		
+		Joerger and Pervan~\etal~\cite{} &
+		Control Theoretical (Kalman Filter) &
+		Monitoring state estimation errors &
+		High &
+		Shown in simulations only &
+		Linear Dynamical systems \\
+		
+		\rowcolor{gray!20} Liu~\etal~\cite{} &
+		Data-driven + Statistical filtering/recovery &
+		Used for data errors such as timing, formatting and outliers &
+		Moderate, heavy pre-engineering &
+		Shown on a single system &
+		Data recovery/cleaning and not fault diagnosis is the goal \\
+		
+		Ayadi~\etal~\cite{}, Elnahrawy~\etal~\cite{}, Koushanfar~\etal~\cite{}, Murphree~\etal~\cite{}, Ni~\etal~\cite{}, Niggemann~\etal~\cite{}, O'Reily~\etal~\cite{}, Power~\etal~\cite{}, Rashid~\etal~\cite{}, Sharma~\etal~\cite{}, Subramaniam~\etal~\cite{}, Wu~\etal~\cite{} &
+		Data-driven environmental model &
+		&
+		&
+		&
+		\\
+		
+		\rowcolor{gray!20}Khoussainova~\etal~\cite{}, Krishnamachari~\etal~\cite{}, Ni~\etal~\cite{}, Sheng~\etal~\cite{}, Tolle~\etal~\cite{} &
+		Estimation-based methods &
+		&
+		&
+		&
+		\\
+		
+		Maag~\etal~\cite{}, Whitehouse~\etal~\cite{}, Tang~\etal~\cite{}, Dorffer~\etal~\cite{}, Wang~\etal~\cite{}, Saukh~\etal~\cite{}, Xiang~\etal~\cite{}, Yan~\etal~\cite{} &
+		Calibration-based methods &
+		&
+		&
+		&
+		\\
+		
+		\rowcolor{gray!20} Chakraborty~\etal~\cite{}, Liu~\etal~\cite{} &
+		Hardware-based techniques &
+		&
+		&
+		&
+		\\
+		
+		
+		
+		
+		\hline 
+	\end{tabular}\\
+	\vskip1pt 
+	\quad \raggedright 
+	$^1$ called inter-arrival time for sporadic and aperiodic flows
+	%}
+	\label{tbl:flow_para}
+	\vspace{-1.5\baselineskip}
+\end{table*}
+\end{comment}
+
+
+% \begin{table}
+% %\begin{wraptable}{R}{8cm}%[ht]\small
+% 	%\renewcommand{\arraystretch}{1.1}
+% 	\vspace{-\baselineskip}
+% 	\centering
+% 	\footnotesize
+% 	\caption{{\bfseries Physics-based sensor failure detection \& diagnosis} Approaches}
+% 	%\vspace{-10pt}
+% 	\begin{tabular}{p{2.25cm} p{2.5cm} p{2.5cm}}
+% 		\hline %\\
+% 		\textsc{\bfseries Aspect} & \textsc{\bfseries Fall Curve} & \textsc{\bfseries CurrentSense}\\
+% 		\hline\hline
+% 		\rowcolor{gray!20} \multicolumn{2}{l}{\bfseries Lens Subsystem}\\
+% 		Lens dislodged \newline (Class I) & Lens cap suffers partial or complete dislocation \eg physical impact with a foreign object, degradation of bonding,~\etc \\
+% 		Lens deformed \newline (Class II) & Lens cap suffers physical damage in-place \eg deformation, puncture,~\etc \\
+% 		Lens covered \newline (Class III) & Lens cap gets physically obstructed by foreign particles \eg dust, paper or tape \\
+% 		\hline
+% 		\rowcolor{gray!20} \multicolumn{2}{l}{\bfseries Pyroelectric Subsystem} \\
+% 		Optical filter \newline damage (Class IV) & Damaged by environmental factors~\eg oil condensation\\
+% 		\hline
+% 		\rowcolor{gray!20} \multicolumn{2}{l}{\bfseries Electronic Subsystem} \\
+% 		Electronic faults \newline (Class V) & Hardware failures~\eg short circuits, floating outputs~\etc \\
+% 		% Thermal Faults & Pyroelectric element can degrade or age and can give imperfect output\\
+% 		\hline
+% 	\end{tabular}
+% 	\label{tab:pir_faults}
+% 	%\vspace{-10pt}
+% 	\vspace{-\baselineskip}
+% %\end{wraptable}
+% \end{table}
+
+Current solutions for failure detection and diagnosis in sensors fall into one of three categories -- \ca Data-driven techniques, \cb Calibration-based techniques and \cc Fingerprint-based techniques.
+
+\textbf{Data-driven techniques.} Prevalent research efforts have largely focused on data-centric approaches (rule-based or anomaly detection), where historical data %(ranging from days to years) 
+of the sensor is analyzed and a fault is identified if the data is out of bounds of the expected behavior~\cite{rashid2016collect, 10.1145/3365871.3365872}.  Sharma~\etal~\cite{10.1145/1754414.1754419}, proposed a multiplicative seasonal ARIMA time series model for fault detection, where the parameter captures periodic behavior in the sensor data. % measurement time series. 
+The downside of temporal analysis methods is that
+they are prone to false positives and are not feasible in long-term
+deployments. Wu~\etal~\cite{4262542} used a spatial mining-based approach that uses spatial correlation between neighboring sensors to detect anomalies. Additionally, techniques such as Ayadi~\etal~\cite{7505190}, Murphree~\cite{7589589} and Power~\etal~\cite{10.1145/3365871.3365872} require significant labeled data as it models only the environment and does not model the sensor physics. Estimation-based methods model normal sensor behavior leveraging spatiotemporal correlation and probabilistic models such as Bayesian or Gaussian distributions~\cite{10.1145/1140104.1140114} and they work well in homogeneous environments. In a nutshell, the key challenge with data-driven techniques is that it relies on rules and patterns in the sensed data.
+We argue that for PIR sensors since the data is non-periodic and dependent on deployment scenarios (\eg people counting in Starbucks,   
+animal detection in forests, etc.), \textit{it is non-trivial to detect faults by just analyzing sensor data.} Further, this requires significant manual efforts and tailor-made rules to detect faults, and can eventually have high false positives due to unseen data patterns. Additionally, data-driven techniques do not provide information about the specific nature or degree of failure in the sensor. As a result, they do not aid in the process of developing repair strategies. This is also seen in works such as Tawakuli~\etal~\cite{tawakuli2023experience}, that discusses the repercussions of missing data to be of two types -- \ca isolated missing data and \cb sequence missing data. They develop a domain-independent, dataset-independent, hybrid imputation strategy that can give better estimation accuracy by looking at six real-world datasets such as AirQuality and NASDAQ time-series data. Tawakuli~\etal~\cite{Tawakuli2022TransformingID} describes a generic edge-cloud IoT-based preprocessing framework targeting AI pipelines. The framework comprises steps such as data cleaning and feature engineering, and can leverage \sol to assist in cleaning data associated with faulty PIR sensors. In summary, data-driven techniques, while scalable, often entail substantial labeling efforts, leading to high costs, and can exhibit low accuracy due to their dependence on custom rules and patterns. Moreover, they provide no guidance on correcting faulty sensors, as they disregard the underlying physics of sensing.
+
+\textbf{Calibration-based techniques.} These techniques rely on the presence of an additional (reference) sensor, either to perform periodic calibration~\cite{whitehouse2002calibration, 8405565} or carrying additional information in a different domain space.  \Eg using a camera to cross-check the data of a PIR sensor~\cite{tang2017occupancy}. Numerous algorithms have been developed for performing calibration such as blind calibration~\cite{7472216, 7495010}, collaborative calibration~\cite{10.1145/2737095.2737113, 10.1145/2185677.2185687} and transfer calibration~\cite{article_nose}. Agarwal~\etal~\cite{Agarwal2021ANA} uses temperature and power consumption data to infer if a HVAC is faulty or working. It relies on the correlation between the two individual data streams from auxiliary sensors~\viz smart meters and temperature sensor. By studying such a relationship between multiple sensors, Agarwal~\etal~\cite{Agarwal2022ANA} provide a optimization framework to minimize the number of sensors required to sense a facet such as occupancy. Their framework uses fault tolerance information in their framework and, in such a setting, \sol can be used to minimize the number of sensors in a Building Management System (BMS), thereby lowering operational costs and improving efficiency. Huchuk~\etal~\cite{huchuk2021data} develop a machine learning model based on data from thermostats to predict set points overrides that happen across a set of buildings, helping create more energy efficiency schemes. They note that using building-level indoor conditions will help create more energy efficient schedules and \sol can aid in improving the accuracy of such systems. However, all of these approaches that use reference sensors are expensive and lacks scalability for large IoT deployments. % or those in developing countries.%A majority of the current solutions for fault diagnosis in sensors are data-driven approaches using time-series fault detection~\cite{rashid2016collect, niggemann2015data}, where the nature of the data (\ie the final sensor output) is used to derive the status of the sensor as either working or failed. In addition, there exists solutions that rely on the presence of an additional (reference) sensor, either to perform periodic calibration~\cite{whitehouse2002calibration, 8405565} or carrying additional information in a different domain space.  \Eg using a camera to cross-check the data of a PIR sensor~\cite{tang2017occupancy}.  In addition, using reference sensors is an expensive strategy that does not scale well for larger deployments.
+
+\textbf{Fingerprint-based techniques.} %Sensor failures can occur due to numerous reasons, from electronic component failures, improper installation to environmental factors such as dust and extreme temperatures. Recent works have focused on analyzing the underlying physics of the sensor and its hardware characteristics to determine sensor faults~\cite{chakraborty2018fall, marathe2021currentsense,10.1145/3458864.3466869}. 
+Chakraborty~\etal~\cite{chakraborty2018fall} develop a sensor signature~\viz ``Fall Curve'' that measures a sensor's voltage response when the power is turned off, to detect faults in periodic on-off based analog sensors. 
+%
+The Fall Curve characterizes the parasitic capacitance and hardware circuitry of the sensor. Crucially, Chakraborty \etal show this signature is unique for every sensor type and is independent of the environment. They demonstrate that this approach works well for sensors that have very little or no warm-up time and work in a periodic on-off fashion. 
+%
+Furthermore, Chakraborty \etal \cite{chakraborty2018fall} point out to the fact that extending this approach to digital sensors where one doesn't have direct access to the analog signal is challenging. Additionally, Fall Curve is complex in sensors having low value of operating voltages and lack periodicity in the sensing mechanism. Our work concerns this design space of exploring faults in discrete-valued PIR sensors. PIR sensors are challenging since in addition to being discrete valued, the internal analog signal~\viz output from the pyroelectric element has a very low value. 
+%
+Similarly, Tambe~\etal~\cite{10.1145/3458864.3466869} show a variant of Fall Curve~\ie ``Fall Time'' of the analog signal can detect faults and drifts in phototransistor components of the sensor.
+However, both Fall Curve and Fall Time signatures do not work on certain types of sensors including PIR, that operate under low voltages and are event-triggered. Marathe~\etal~\cite{marathe2021currentsense} show that analyzing the current profiles of a digital sensor can provide insights into component failures especially in electro-mechanical sensors. However, this approach is limited to power-hungry digital sensors. % that are power-hungry.
+%
+Gupta~\etal~\cite{10.1145/3576842.3582386} develop a Verified Telemetry SDK (VT-SDK) constructed on robust sensor fingerprinting algorithms and demonstrate fault detection on multiple sensors ranging from air pollution to pressure sensors.
+%
+There are other hardware-based techniques such as Liu~\etal~\cite{Liu_Huang_Luo_Harkin_McDaid_2019} that detects electronic faults by developing additional circuits inspired by the biology of neurons.
+%
+In summary, fingerprint-based techniques have been applied to sensors such as air pollution, smoke, and soil temperature and moisture sensors but have not been extended to PIR sensors.
+
+%Our idea is inspired by the recent sensor fingerprinting approaches that exploits hardware signals to characterize the sensor and detect faults in them. Specifically, our work on PIR sensors addresses the challenge of diagnosing faults in non-periodic, discrete-valued sensors with low operational voltages. 
+PIR sensors are challenging since in addition to being discrete-valued, the internal analog signal output from the pyroelectric sensor has a very low value, often oscillating between 1--1.8V. We show that the intermediate analog output (\aout) from the PIR sensor carries interesting insights on the characteristics of the sensor. Narayana~\etal~\cite{narayana2015pir} leveraged this signal %analog signal information from a PIR sensor 
+by developing a customized sensor array % in a strategic geometric arrangement -- 
+for performing localization and studying object metrics. They develop a customized sensor tower consisting of a strategic geometric arrangement of multiple PIR sensors to enable capturing the analog signal from those multiple sensors. They use this to study the object size (height and width) and posture (such as its distance from the sensor and the direction of motion) and its impact on features of the analog signal such as frequency, amplitude, phase and time difference between peaks. 
+%
+% Additionally, they explore between the gain of the amplifier and the range of the field of view (FoV) of the sensor and establish a relation between the range of the sensor and the peak to the peak amplitude enabling localization.
+%
+However, Narayana~\etal~\cite{narayana2015pir} do not explore reliability.% in PIR sensors. 
+%
+%In this paper, we develop a detailed analysis of the physics of PIR sensors, analyzed the various practical failures to develop a failure taxonomy and show that we can use the analog signal (\aout) to capture insights into the fault diagnosis of the sensor. Furthermore, our approach is complementary to existing data-driven techniques and can be used in conjunction with it. 
+
+%\ashish{can we can say somewhere that this systems technique can be used in conjunction with data-driven techniques and can reinforce data-driven anomaly detection techniques? -- might need to have the latter in evaluation as well.}
+
+
+% Databased fault detection
+% Aout usage
+% Fault detection in sensor (FC and other)
+
+
+% Chakraborty \etal \cite{chakraborty2018fall} developed a signature known as ``Fall Curve'' to detect faults in \textit{analog} sensors using their voltage and current responses after the sensor is turned off. The Fall Curve characterizes the parasitic capacitance and hardware circuitry of the sensor. Crucially, Chakraborty \etal show this signature is unique for every sensor type and is independent of the environment. They demonstrate that this approach works well for sensors that have very little or no warm-up time and work in a periodic on-off fashion.
+
+% Narayana \etal \cite{narayana2015pir} were the first to leverage the analog signal information from a PIR sensor by \textit{fitting in} an amplifier. They develop a customized sensor tower consisting of a strategic geometric arrangement of multiple PIR sensors to enable capturing the analog signal from those multiple sensors. They use this to study the object size (height and width) and posture (such as its distance from the sensor and the direction of motion) and its impact on features of the analog signal such as frequency, amplitude, phase and time difference between peaks. Additionally, they explore between the gain of the amplifier and the range of the field of view (FoV) of the sensor and establish a relation between the range of the sensor and the peak to the peak amplitude enabling localization.
+% However, Narayana \etal \cite{narayana2015pir} work does not explore failures of in individual PIR sensors and the possibility of using this analog signal to give hints on the sensor. 
+
+% Data-driven anomaly detection - \cite{}
+
+
+% Calibration paper - \cite{} 
+
+
+

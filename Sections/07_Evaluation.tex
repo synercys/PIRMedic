@@ -1,0 +1,328 @@
+
+% \begin{figure}[!t]
+% %\vspace*{-2\baselineskip}
+% \centering
+% \includegraphics[width=3.1in]{figures/classification/LensDefects/kNN.png}
+% %\vspace*{-1.0\baselineskip}
+% \caption{Confusion matrix using kNN algorithm when applied to classify Lens failures}
+% %\vspace*{-0.25\baselineskip}
+% \label{fig:pir_sensor_evm}
+% \end{figure}
+
+
+%%%% Commenting since added in table below
+% \begin{figure}[!t]
+% %\vspace*{-2\baselineskip}
+% \centering
+% \includegraphics[width=3.1in]{figures/classification/LensDefects/SVM.png}
+% %\vspace*{-1.0\baselineskip}
+% \caption{Confusion matrix using SVM classification algorithm when applied to classify Lens failures}
+% %\vspace*{-0.25\baselineskip}
+% \label{fig:pir_sensor_evm}
+% \end{figure}
+
+
+% \begin{figure}[!t]
+% %\vspace*{-2\baselineskip}
+% \centering
+% \includegraphics[width=3.1in]{figures/classification/LensDefects/NaiveBayes.png}
+% %\vspace*{-1.0\baselineskip}
+% \caption{Confusion matrix using Naive Bayes classification algorithm when applied to classify Lens failures}
+% %\vspace*{-0.25\baselineskip}
+% \label{fig:pir_sensor_evm}
+% \end{figure}
+
+\subsection{Design} PIR sensors come in a variety of designs. Some are ceiling mount such as Figure , whereas some are mounted on the walls such as Figure. Typically, a sensor consist of a pyroelectric element housed in an insulated casing connected to electronic circuitry to  
+
+PIC uC.
+LDR
+
+
+\subsection{Working} 
+
+A PIR sensor comprises of a pyroelectric sensor coupled with electronic circuitry. The circuit of a pyroelectric sensor is as depicted in Figure . In a pyroelectric sensor there are two pyroelectric elements connected in serially opposite configuration. The pyroelectric element by itself is a passive sensor. That is, it produces a potential difference at its two terminals proportional to the incident light. With the two such elements opposing each other in the sensor, we get a differential voltage at the output of their combination. Due to such differential output, the pyroelectric sensor does not measure the intensity of incident light but measures a change in incident light. This ensures that factors such as ambient room temperature have very less effect on the operation of the sensor. The differential voltage is then fed to the gate of a Junction Field-Effect Transistor (JFET). When the JFET is powered, the output at the source of the JFET is controlled by the output of the pyroelectric elements. The construction of the pyroelectric sensor is as shown in Figure. The pyroelectric elements and the JFET are encased in a housing and a filter is placed on top of the pyroelectric elements. This filter allows only infrared light to pass through. A fresnel lens is used to divide the entire region observable to the pyroelectric sensor into small cells. This increases the range of the sensor by manifolds.
+
+% \begin{figure}[!t]
+% %\vspace*{-2\baselineskip}
+% \centering
+% \includegraphics[width=3.1in]{figures/pir/pictures/pir-sensor-module.png}
+% %\vspace*{-1.0\baselineskip}
+% \caption{Photograph of a commodity PIR sensor consisting of a plastic Fresnel lens cap focusing invisible infrared rays into a pyroelectric element beneath the cap. The sensor comes with supporting electronics to amplify, denoise and process the output from the pyroelectric element}
+% %\vspace*{-0.25\baselineskip}
+% \label{fig:pir_sensor_module}
+% \end{figure}
+
+
+When there is human movement which is within the observable region of the pyroelectric sensor, there is a change in the pattern and intensity of infrared light incident on the pyroelectric sensor as shown in this image ~\ref{fig:}. This change is observed due to the heat radiated by human bodies. The change in the incident light generates a differential voltage at the two terminals of the pair of pyroelectric elements, which in turn can also be observed at the source terminal of the JFET. The output at the source of the JFET, when a single human moves in the observable region looks like ~\ref{fig:}. As it is hard to infer the said movement from this waveform, it needs to be processed by additional electronic circuitry. 
+
+The raw output of the pyroelectric sensor is centred around a DC voltage level typically between 1-2 V. This raw output is processed using a series of Operational Amplifiers (OpAmps). The first stage of OpAmps amplifies the AC component. It also uses filters to attenuate frequencies outside of a particular frequency range. This range is calculated based on the human movement that it is designed to detect. Normally, to detect slow movements to fast movements like running, a bandpass filter of 2 - 10 Hz is used. The output of the first stage, when a single human moves in the observable region looks like Figure~\ref{}. The first peak indicates movement of the body going into the observable region, while the second inverted peak indicates movement of the body, going out of the observable region. We call this waveform, characteristic waveform from here on. When there are multiple movements, the output of the first stage looks like Figure~\ref{}. This is a waveform created by addition of multiple time shifted characteristic waveforms.
+The output of the first stage of opamps is fed to window comparators, the second opamp stage. This converts the analog signal to a digital signal. 
+
+\subsection{Sensor Drift} Sensor drift is the phenomenon caused by gradual ageing or exposure to elements that causes degradation in the reliability of the sensing phenomenon. Typically, sensor drift goes undetected in measurements and is a cause of great concern in adopting IoT.
+
+We perform experiments to measure the impact of sensor drift on our signature. Note that the data from the sensor has no signal of the degraded quality of data. Our hypothesis is that \textit{our signature is effective, if it is able to capture the sensor drift.}
+
+\ashish{Meeting Notes: This is not environmental independent easily and requires complex setup.}
+
+\ashish{Add details of distribution of data, going over the top of that - }
+
+
+
+\subsection{Fault Identification} In this stage, we identify the broad class of failure \ie we identify which class of failure is present on the sensor. 
+
+In our evaluation, We deploy the sensors by creating 5 classes of failures synthetically and analyzing it using our fingerprint. 
+
+In one instance, we created the following scenarios: \ca Lens cap dislogded completely, \cb Len cap deformation by puncture, \cc Lens cap covered by paper, \cd Pyroelectric window damaged by humidity, and \ce Electronic Failure due to shorting $C_{out}$ and $A_{out}$.
+
+The system was deployed for a period of 2 weeks. We observe the confusion matrix obtained as shown in Table~\ref{tbl:fault_classification_perf}
+
+\begin{table}[h]\small
+        \centering
+        %\hrulefill
+        \caption{Performance of Fault Classification on a 24-hour deployment in the elevator of a building in Champaign, Illinois. The sensors deployed were failed synthetically to trigger a certain class of failures.}
+        %\resizebox{\textwidth}{!}{
+        \begin{tabular}{p{0.9cm}p{0.9cm}p{0.9cm}p{0.9cm}p{0.9cm}p{0.9cm}}
+            \hline
+            \textbf{} & \textbf{Class 1} & \textbf{Class 2} & \textbf{Class 3} & \textbf{Class 4}& \textbf{Class 5} \\
+            \hline \hline
+            \rowcolor{gray!20} Class 1 & 16 & 10.67 & 74.83 & 0 & 0 \\
+            Class 2 & 1.52 & 81.22 & 17.26 & 0 & 0 \\
+            \rowcolor{gray!20} Class 3 & 1.93 & 1.29 & 96.77 & 0 & 0  \\
+            Class 4 & 0 & 39.38 & 0 & 60.62 & 0\\
+            \rowcolor{gray!20} Class 5 & 0 & 0 & 0 & 0 & 100\\
+            \hline 
+        \end{tabular}
+        %}
+        \label{tbl:fault_classification_perf}
+\end{table}
+
+
+\begin{figure}[!t]
+%\vspace*{-2\baselineskip}
+\centering
+\includegraphics[width=3.1in]{figures/pir/fault identification/5class.png}
+%\vspace*{-1.0\baselineskip}
+\caption{Confusion matrix using SVM classification algorithm when applied to classify Lens failures}
+%\vspace*{-0.25\baselineskip}
+\label{tbl:fault_classification_perf_2}
+\end{figure}
+
+\noindent \textbf{Observations:} \ci Class 3 failures (Lens cap covered) and Class 5 failures were classified with high accuracy. This is natural because the lens cap covering leads to a drastic and noticeable reduction in light rays incident on the pyroelectric element. \\
+\cii Class 1 failures (Lens cap dislodged) gets misclassified as Class 3 failures (Lens cap covered) majority of the time. This is because sometimes dislodging (depending on the extent of how much the cap has been disloged, the angle of misalignment ~\etc) can create the same effect of reduced incident light on the pyroelectric element as the lens cap covered scenario.
+
+\ashish{Eliminate class I and class III - what is all classitified as class III - does it belong to partially covered? - use all the classes as is - 1a and 1b - is it because of the definition - take a look at the data itself to understand the features and shape}
+
+\ashish{10-fold fault classification}
+
+\ashish{working - Aout , introduce fault, how does Aout change?}
+
+\ashish{live deployment, go manually verify the fault when it is flagging a fault - over a 2 period we found 10 instance of faults,}
+
+\ashish{BuildSys (outside core papers - increase evaluation, outlier papers), IoTDI, EWSN}
+\ashish{Flow Sensor IPSN/IoTDI, Ubicomp journal model}
+
+\subsection{Fine-grained Fault Analysis} We evaluate fine-grained fault analysis of each class by deploying it in conjunction with a working sensor. 
+
+In our experiments, we deployed sensors with Class 3 failures and performed fingerprint analysis. We observe the confusion matrix as showin in Table~\ref{tbl:fine_grained_class3_perf}.
+
+\begin{table}[h]\small
+        \centering
+        %\hrulefill
+        \caption{Performance of fine-grained analysis of Class 3 failures (Lens cap covered) on a 24-hour deployment in the lobby of a building in Champaign, Illinois. The lens cap covering include : \ca paper, \cb chalkdust and \cc plastic tape.}
+        %\resizebox{\textwidth}{!}{
+        \begin{tabular}{p{1.0cm}p{1.2cm}p{1.2cm}p{1.2cm}p{1.2cm}}
+            \hline
+            \textbf{} & \textbf{Working} & \textbf{Class 3a} & \textbf{Class 3b} & \textbf{Class 3c} \\
+            \hline \hline
+            \rowcolor{gray!20} Working & 99.24 & 0.76 & 0 & 0 \\
+            Class 3a & 0 & 100 & 0 & 0 \\
+            \rowcolor{gray!20} Class 3b & 0 & 0 & 100 & 0 \\
+            Class 3c & 0 & 0 & 0 & 100\\
+            \hline 
+        \end{tabular}
+        %}
+        \label{tbl:fine_grained_class3_perf}
+\end{table}
+
+
+
+
+
+
+
+% \begin{figure}[!t]
+% %\vspace*{-2\baselineskip}
+% \centering
+% \includegraphics[width=3.1in]{figures/pir/pictures/pir-sensor-evaluation-kit.jpg}
+% %\vspace*{-1.0\baselineskip}
+% \caption{Photograph of a PIR sensor evaluation kit allowing us to study hardware signals 
+% from these sensors in greater detail.}
+% %\vspace*{-0.25\baselineskip}
+% \label{fig:pir_sensor_evm}
+% \end{figure}
+
+
+%%%%%%%%%%%%%COMMENTING ALL GRAPHS BELOW
+
+\begin{figure}[!t]
+%\vspace*{-2\baselineskip}
+\centering
+\includegraphics[width=3.1in]{figures/pir/working/pir-core-working-principle.jpg}
+%\vspace*{-1.0\baselineskip}
+\caption{PIR sensor internal circuitry consisting of a voltage follower\cite{}.}
+%\vspace*{-0.25\baselineskip}
+\label{fig:pir_sensor_evm}
+\end{figure}
+
+
+
+\begin{figure}
+%\vspace*{-2\baselineskip}
+\centering
+\includegraphics[width=3.1in]{figures/pir/working/pir-evm-blocks.png}
+%\vspace*{-1.0\baselineskip}
+\caption{Hardware signals exposed by a PIR Evaluation Kit.}
+%\vspace*{-0.25\baselineskip}
+\label{fig:pir_sensor_evm}
+\end{figure}
+
+\begin{figure}
+%\vspace*{-2\baselineskip}
+\centering
+\includegraphics[width=3.1in]{figures/pir/working/pir-evm-signals.png}
+%\vspace*{-1.0\baselineskip}
+\caption{Hardware signals exposed by a PIR Evaluation Kit.}
+%\vspace*{-0.25\baselineskip}
+\label{fig:pir_sensor_evm}
+\end{figure}
+
+\begin{figure*}
+	%\vspace{-\baselineskip}
+	\centering
+	\subfloat[\label{fig:bgoverlap}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/working/working-pir-without-obstacle.png}}
+%   \vspace{-1.2em}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/working/working-pir-with-obstacle.png}}
+% 	\vspace{-1.2em}
+	\subfloat[\label{fig:avionics_ex_indv_runs_nobg}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/working/working-pir-with-fast-obstacle.png}}
+	\caption{PIR Sensor Working (a) No obstacle (b) With obstacle (c) With fast obstacle}
+	\label{fig:PIR-sensor-working}
+	%\vspace{-1.5\baselineskip}
+\end{figure*}
+
+
+
+
+This two stage design is observed in a wide range of PIR sensors deployed  commercially. -- Give examples of BIS, Murata EVM, ST, TI, and ceiling PIR.
+
+\section{General Approach} 
+
+Long term data accumulation -- easier to 
+
+\subsection{Commonly found faults in PIR Sensors}
+
+\begin{itemize}
+    \item Lens Cap Removal
+    \item Lens Cap getting smudged with dust, lint
+    \item Window covering
+    \item Thermal faults
+    \item Faults in electronic circuitry
+\end{itemize}
+
+\begin{figure*}
+	\centering
+	\subfloat[\label{fig:bgoverlap}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/lens_fault/lens-cover-fallsoff-pir-without-obstacle.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/lens_fault/lens-cover-falls-off-pir-with-obstacle.png}}
+	\caption{Fallen lens cover sensor response $A_{out}$ and $C_{out}$ (a) Without Obstacle (b) With obstacle}
+	\label{fig:len-covered}
+\end{figure*}
+
+\begin{figure*}
+	\centering
+	\subfloat[\label{fig:bgoverlap}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/lens_fault/lens-covered-pir-without-obstacle.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/lens_fault/lens-covered-pir-with-obstacle.png}}
+	\caption{Dirty or covered lens sensor response $A_{out}$ and $C_{out}$ (a) Without Obstacle (b) With obstacle}
+	\label{fig:len-covered}
+\end{figure*}
+
+
+
+\begin{figure*}
+	\centering
+	\subfloat[\label{fig:bgoverlap}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/window_covered/window-covered-pir-black-tape.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/window_covered/window-covered-pir-with-black-tape-with-obstacle.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/window_covered/window-covered-pir-without-obstacle-window-and-lens-covered.png}}
+	\caption{Window covered sensor response $A_{out}$ and $C_{out}$ (a) Window Covered with black tape, (b) Window Covered with black tape \& with obstacle, (c)Window Covered with black tape \& lens covered without obstacle,}
+	\label{fig:len-covered}
+\end{figure*}
+
+
+\subsection{Experiments with Module}
+\begin{itemize}
+    \item Current
+    \item Fast ON OFF (trigger)
+    \item Warmup Trigger
+    \item Warmup Smooth
+    \item Slow movement Aout connected to source of JFET
+    \item Slow movement Aout connected to o/p of opamp 2 of BIS
+    \item Fast movement Aout connected to o/p of opamp 2 of BIS
+\end{itemize}
+
+\begin{figure*}
+	\centering
+	\subfloat[\label{fig:bgoverlap}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/warmup_trigger/warmup-trigger-normal.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/warmup_trigger/warmup-trigger-lens-removed.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.33\linewidth]{figures/pir/warmup_trigger/warmup-trigger-lens-covered.png}}
+	\caption{Warmup trigger sensor response $A_{out}$ and $C_{out}$ (a) Window Covered with black tape, (b) Window Covered with black tape \& with obstacle, (c)Window Covered with black tape \& lens covered without obstacle,}
+	\label{fig:len-covered}
+\end{figure*}
+
+\begin{figure*}
+	\centering
+	\subfloat[\label{fig:bgoverlap}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/warmup_smooth/warmup-smooth-no-obstacle.png}}
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/warmup_smooth/warmup-smooth-lens-removed.png}}
+	\hfill
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/warmup_smooth/warmup-smooth-lens-covered.png}}
+	\hfill
+	\subfloat[\label{fig:avionics_ex_indv_runs_bg}]{%
+		\includegraphics[width=0.50\linewidth]{figures/pir/warmup_smooth/warmup-smooth-period-calculation.png}}
+	\caption{Warmup smooth sensor response $A_{out}$ and $C_{out}$ (a) No obstacle, (b) Lens removed, (c) Lens covered and, (d) Calculation of the warmup-period showing it is around 28 seconds }
+	\label{fig:len-covered}
+\end{figure*}
+   
+        
+        
+
+
+
+\subsection{Experiments with Evaluation Board}
+
+
+
+
+\subsection{Validation of Evaluation Board Experiments with PIR Module -- deployment experiments}
+
+% \begin{figure*}
+% %\vspace*{-2\baselineskip}
+% \centering
+% \includegraphics[width=1.0\linewidth]{figures/pir/PSD/representation.png}
+% %\vspace*{-1.0\baselineskip}
+% \caption{Power Spectral Density(PSD) plots of the $A_{out}$ from a working sensor and a faulty sensor. Orange curve is for a faulty sensor, whereas the blue curve  corresponds to a working sensor. At above 5Hz, the faulty one's PSD is higher than working one. . We can calculate the cutoff frequency of PIR's bandpass filter and then depending on the cutoff frequency, we can decide if the sensor is faulty or not. Note that the fault induced here was a thermal fault on the pyroelectric sensor. The time domain representation is on top whereas the frequency domain representation is at the bottom. The experiment duration is 500 seconds. }
+% %\vspace*{-0.25\baselineskip}
+% \label{fig:pir_sensor_evm}
+% \end{figure*}

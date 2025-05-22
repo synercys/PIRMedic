@@ -1,0 +1,50 @@
+\section{Discussion}
+
+\noindent\textbf{Practicality:} We note \aout is an intrinsic signal that is present in all PIR sensors, since it is part of the sensing physics in a PIR sensor. 
+%
+However, as most applications require only binary occupancy data (\ie occupied or not occupied), some commercial-grade PIR sensors typically do not provide easy access to the \aout signal.
+%
+While \sol focuses on low-cost, commodity PIR sensors costing less than \$10-15, its physics is identical to that seen in commercial-grade PIR sensors. In fact, we obtained one such commercial PIR sensor from our building ceiling and analyzed the \aout waveform by connecting it to an oscilloscope. In our preliminary observations, we saw that the shape of \aout is similar to that in the low-cost sensors used in this paper.
+%
+Additionally, there exist some commercial sensors (\eg~\cite{panasonic_amn22111,panasonic_amn23111}) that expose \aout.
+%
+In addition, existing sensors can be modified to expose \aout --- most do as a test point on the PCB. This modification would not incur any additional hardware costs, with the exception of a new pin connector. We believe that our work can provide further incentive to other manufacturers. Lastly, our conference paper in ACM BuildSys~\cite{10.1145/3486611.3486658} was added to the product webpage by Murata electronics~\cite{murata_imx070_manual} and we hope other manufacturers use this to expose \aout in their sensor designs.
+%
+
+\noindent \textbf{Latency:} \sol can precisely determine if a sensor is working or faulty in single time window, which in our case comprised of 1024 samples. Since we sample at 20 Hz, the end-to-end process of data acquisition, processing and inference can be performed in a little over one minute.
+%
+
+\noindent\textbf{Consistency of behavior:} We observed that the inherent characteristics of the \aout signal, both in time and frequency domains, remain consistent across different manufacturers. This is expected since all PIR sensors use a pyroelectric element and the physics of operation is deterministic.
+%
+
+\noindent \textbf{Scale of Deployment:} Our deployment comprised of 15 sensors across various building occupancy scenarios, both in India and US, where we used a random combination of sensors in each of these deployment scenarios. While we acknowledge that our deployment scale is small-scale from the perspective of a city or a municipality spanning multiple buildings, the techniques described in this paper can be applied to a larger scale deployment comprising more sensors. To scale to larger deployments, one needs to -- \ca have edge platforms (Raspberry Pi and Arduino) located in close proximity to each of the sensor deployments (\eg in the aisle of a building for a series of rooms), \cb run wiring from each of those sensors to the edge platforms (\eg one can leverage points where PIR sensors are connected to lighting and HVAC systems) and \cc perform computation on a server on the premises of the building, such as the Building Management System (BMS), to ease the computational load on the edge platforms.
+%The goal of the deployment was to demonstrate the use of physics to separate working and faulty sensors and identify their faults; the deployments can be scaled up by used of more edge platforms and sensors. }
+
+\noindent \textbf{Differentiation of Faults:} The goal of \sol is to {\em associate each faulty sensor to a failure in the corresponding sensor subsystem} shown in {\bfseries Table~\ref{tab:pir_faults}}. The classification of faults in this manner was a deliberate choice -- based on the physics of the PIR sensor, as we wanted our solution to be specific to sensors that are ubiquitous in modern buildings. Additionally, while a PIR sensor can have multiple faults present, we intentionally study faults in isolation to separate their physics and understand the impact of each of these failures on individual subsystems.
+
+\noindent \textbf{Degradation \& Aging:} PIR sensors are susceptible to environmental elements over time, leading to degradation and aging. While we previously examined one form of degradation in \S\ref{subsec:incremental_dust}, where dust accumulation on the PIR sensor was studied, we plan to investigate additional forms of aging and degradation in the future to analyze their impact on sensor physics and the fault diagnosis process. The primary goal of this work was to understand failures and their effects on sensing physics; therefore, degradation and aging were excluded from the current analysis. However, as deployments become more long-term, these factors may play a crucial role in the analysis.
+
+\noindent\textbf{Design:} We envision \sol to be connected to a Building Management System (BMS) and provide real-time fault detection. We envision developing APIs for application developers to build higher-level diagnostic tools on top of \sol.
+
+\noindent \textbf{Future work and research challenges:} Gupta~\etal~\cite{Gupta2019NewMA} in the ACM LCTES'19 keynote mention the importance of fusing and navigating multiple data streams and contextualizing data streams in a CPS such as a Building Management System. They emphasize the importance of capturing taxonomy of entities (\eg data points, location and equipment) and their relationships for developing building applications. Additionally, schema systems such as BRICK~\cite{balaji2016brick}, Scrabble~\cite{10.1145/3276774.3276795} and Plaster~\cite{10.1145/3276774.3276794} are designed as solutions developed to contextualize data streams using meta-data. One could envision using \sol to enable fault diagnosis and detection in conjunction with these building-based schema systems thereby making reliability a key facet of such programming platforms. Almanee~\etal~\cite{almanee2019demo} develops a middleware, SemIoTic, that provides a semantic view of an IoT space to both the inhabitants and application developers. SemIoTic translates user-defined requests into underlying actions and can also be enhanced with the failure information from \sol. Koh~\etal~\cite{koh2019interactive} demonstrate algorithms to standardize building metadata which can become a key enabler in deploying smart building applications over heterogeneous buildings. Their key contribution is a graphical user interface with a well-defined workflow built upon a common programming interface, called Plaster. We envision that \sol can enable the integration of fault detection and diagnosis into building metadata-based schema systems. This will also improve the robustness of various downstream ML pipelines comprising the BMS that rely on the correctness and validity of data from building sensors such as the PIR sensor.
+
+
+
+%\paragraph{Acknowledgments}We would like to thank Denizhan Kara (UIUC) and Kyo Kim (UIUC) for their insights on feature analysis. Further, we are grateful to Kapil Vaidya (MIT), Aditi Partap (Stanford), Hsuan-Chi Kuo (UIUC), Bin-Chou Kao (UIUC) and Ragini Gupta (UIUC) for their detailed feedback.
+\begin{comment}
+\section{Insights from Real-world Deployment} 
+\label{sec:lessons}
+
+\textbf{\ca Fault Detection to Fine-grained fault analysis} Our current scheme relies on FFT-based features of \aout for fault detection. We extended this to failure diagnosis \ie identifying the source of failure using additional features. In Class III failures, we are able to pin-point to the cause such as obstruction due to paper, tape or plastic owning to their different thermal response characteristics.
+
+%\textbf{Which fault is most pernicious?} In our experience, we found that any foreign substance such as paper or tape when covering the lens cap can lead to close to complete absorption of the thermal radiation and can lead to a large amount of missed obstacles. Consequently, these failures can be easily perceived by the poor performance of the sensor -- both in time domain as well as frequency domain. Failures that are more subtle, such as cap dislodging, deposition of dust and lens deformations are much harder to detect and can be missed in IoT reliability inspections. Thus, these cases require analysis in the frequency domain. In particular, we found that gradual dust deposition on the lens is perceivable well using frequency domain techniques with decay of higher harmonics. We note that this decay is hard to visualize both by observing only the discretized output as well as in time domain.
+
+\textbf{\cb Generality} Our approach of analyzing physics and combining it with practical failures generalizes to other sensors. The process of finding the right features from physics via Benjamini-Hochberg process and fine-tuning the algorithm with SHAP values can augment existing data-driven ML techniques with the sensing physics to get better fault diagnosis techniques. [need to rewrite this]
+
+\textbf{\cc PIR Sensor Designs} We analyzed commercial PIR sensor designs via websites (\eg digikey, adafruit and mouser electronics~\cite{vendor_websites}). As expected, there is no standard sensor design that is consistent across vendors. We observed that some vendors exposed both the Analog (\aout) and Discrete (\cout) outputs, whereas some others exposed only the Discrete output (\cout). %While the final, discrete output is used to drive relays and control devices such as lighting systems or moving doors, we have shown that the intermediate, analog output has fault detection and diagnosis properties.
+%
+%We have shown in this research the promise that using \aout brings to the diagnosis of faults in PIR sensors.
+%
+We recommend that sensor vendors bring out the \aout signal as it helps in reliability.
+%detection and diagnosis of faults.
+\end{comment}

@@ -1,0 +1,118 @@
+Sigmetrics 2021 Winter Paper #241 Reviews and Comments
+===========================================================================
+Paper #241 We Didn't Break the Sensor: A Physics-Based Fault Diagnosis for
+Passive Infra-Red IoT Sensors
+
+
+Review #241A
+===========================================================================
+
+Reviewer expertise
+------------------
+3. Knowledgeable
+
+Paper summary
+-------------
+This paper proposes a physics-informed machine learning approach to "detect and diagnose" the failures of passive infra-red (PIR) sensors. A key observation is that the output voltage of the pyroelectric element is correlated with several failure modes. Based on this finding, this paper uses this physical knowledge to select features and run machine learning algorithms for fault "detection and diagnosis". Data traces are collected in a few real scenarios for validation.
+
+What are the strengths of the paper?
+------------------------------------
++ This paper contains a very good summary of the working principle of PIR sensors.
++ The observation that the output voltage of the pyroelectric element is correlated with several failure mode is interesting.
++ This paper is very well written.
+
+What areas of the paper need improvement?
+-----------------------------------------
+- The solution doesn't "detect and diagnose" the fault of PIR sensors.
+- This is an interesting academic study, but I'm not convinced that this is a viable solution in practice.
+- The focus on a very specific type of PIR sensors that expose Aout.
+
+Comments for author(s)
+----------------------
+1. The claim that the proposed solution PIRMedic can "detect and diagnose" the fault of PIR sensors is not true. Crucially, PIRMedic based on edge platform implementation requires Aout from the target PIR sensor. This essentially means that the target sensor must be un-installed and disassembled, so that Aout can be measured (since PIR sensors are low-cost sensors that don't have communication modules). Thus, PIRMedic isn't really "detecting" any fault on the fly; it's a post-fault analysis at best. For "diagnosis", PIRMedic requires quite some efforts (e.g., collecting training data from both working and faulty sensors, feature selection, ML model training), but the diagnosed "root causes" are actually visible even without these analysis. For example, if the sensor cover is broken, one can easily sees it without PIRMedic. In fact, the authors uses manual inspection as the ground truth when evaluating their accuracy in the experiments.
+
+2. PIRMedic is not a viable solution in practice. The authors claim that PIRMedic targets large-scale low-cost "detection and diagnosis" of PIR sensor faults, but PIRMedic is actually not scalable and can be quite costly given the lengthy data collection and non-trivial model training. PIRMedic has to measure the Aout for each target PIR sensor and, as mentioned in #1, this requires uninstallation of the PIR sensor... This takes at least a few minutes, and needs to be done frequently (e.g., daily). Then, collecting the Aout data and running PIRMedic takes another few minutes. The labor cost even outweighs by far the replacement cost of a PIR sensor! Additionally, most of the faults (shown in Fig. 7) are easily visible, and why do we still need PIRMedic (which itself needs manual inspection as the ground truth "Step 9" in Fig. 12)?
+
+3. This paper only focuses on a very specific type of PIR sensors that expose Aout. It also assumes the electronic subsystem of PIR sensors are always working, and each time only one type of fault is present. Thus, PIRMedic has a very narrow scope.
+
+4. The faults in the experiments are artificially injected. The authors show in Fig. 2 that a fault can occur just intermittently in practice. PIRMedic cannot detect faults in practice due to the lack of continuous measurement of Aout. PIRMedic is a post-fault analysis at best (and this post-fault analysis has little value in practice if it only targets the visible faults in Fig. 7).
+
+Overall merit
+-------------
+1. Reject
+
+
+
+Review #241B
+===========================================================================
+
+Reviewer expertise
+------------------
+1. No familiarity
+
+Paper summary
+-------------
+This paper focuses on PIR (passive infrared sensors) that capture thermal radiation from humans and objects, typically used to indicate occupancy in a region. They analyzed a hardware signal intrinsic to a PIR sensor ( the intermediate analog output from the pyroelectric element in the sensor) to detect whether it has failed, and what type of failure occurred.  Using this hardware signal together with frequency analysis and supervised machine learning, they show high accuracy in PIR failure detection and diagnosis (98 − 99%). Using a controlled setup, they  provided a taxonomy or failures. Finally,  they evaluated their method in real-world deployments of sensors.
+
+What are the strengths of the paper?
+------------------------------------
++ The paper is clearly written, including a good tutorial on PIR sensors and the motivation of the approach. They clearly explain the intuition why the particular signal chosen ($A_out$) contains information about the type of failure (as opposed to the final digital output).
+
++ Well motivated problem: The paper can be useful in efficiently troubleshooting and replacing the popular PIR sensors used in many real-world deployments. Prior works is reported to be wasteful (using  backup sensors) or expensive (using high grade PIR sensors)
+
++, the ML methodology is  thorough: from feature selection and interpretation to model training. Although they did not invent any of the methods used, they applied and extensively evaluated them in a new context.
+
++ The real world deployment is a plus
+
+What areas of the paper need improvement?
+-----------------------------------------
+Are there alternatives in PIR detection and diagnosis that should this paper compare against in a quantitative (not qualitative) way? From my reading, my understanding is that no -- but please clarify.
+
+Comments for author(s)
+----------------------
+Fig. 10: it is not clear how to separate faulty (red) from working (green) sensors,   from shapely values: shapely values have a range of values, how do you pick the threshold? 
+
+Real-world deployment and artificially induced failures: this is interesting. But can you further clarify the effect fo each environment? Where the differences significant or not? 
+ 
+The format of numbered lists in 5.4.1 is non-standard.
+
+Overall merit
+-------------
+3. Weak accept
+
+
+
+Review #241C
+===========================================================================
+
+Reviewer expertise
+------------------
+2. Some familiarity
+
+Paper summary
+-------------
+The paper presents a data-driven, yet physics-based, approach for detection and diagnosis of fault behavior of passive infrared (PIR) sensors. With the goal to reduce sensor maintenance cost and hardware waste, the authors use the physical architecture of PIR sensors and analyze its output voltage signals in different fault regimes. By exposing sensors to different causes of possible malfunctions, the output voltage signals are analyzed, and the main claim is being justified, which is that there are distinctions in time and frequency properties of the output signal which can be harnessed in improving the fault detection and its cause. The authors selected Benjamini-Hochberg feature selection, where the original feature set is created using a readily available package tsfresh, upon which the decision trees are trained  and used for fault detection and diagnosis on the more recent voltage measurements. The validation of the proposed approach was conducted on two continents and at different environmental and occupancy conditions.
+
+What are the strengths of the paper?
+------------------------------------
+The problem does seem interesting, and I am definitely convinced that a sensor state (working/broken) can be identified based on the output voltage signal.
+
+What areas of the paper need improvement?
+-----------------------------------------
+The core of the paper is its analytics component which I think is address poorly. Not enough rigor is placed to set up the statistically sound training and validation process. 
+
+(1) For example, given that all the experimentation with faulty/working sensors was fully controlled, it is not clear how was made sure that a full support of failure modes was captured by the training data. 
+
+(2) There is little discussion on the features apart from the high level process description that they are derived using time and frequency domain output signal information. I noticed the graph, but typically there should be some discussion on why the identified ~10 features seem to be more predictive than others.
+
+(3) There was no discussion on the robustness of the trained model. More specifically, how the size of the data set impacted the models. The accuracy was captured as a function of the window size, but there was no discussion on how it was validated that there was no overfitting.
+
+(4) The paper would benefit from more information on how the experiments were conducted. I do not think that in this form the proposed methodology can be replicated by someone else.
+
+Comments for author(s)
+----------------------
+In addition to the previously included comments, there is a typo when referencing Figure 2 on page 2. Figure 4 was referenced instead.
+
+Overall merit
+-------------
+1. Reject

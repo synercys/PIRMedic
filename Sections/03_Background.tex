@@ -1,0 +1,318 @@
+\section{Background}
+
+% \subsection{Overview of Sensor Types}  
+% Sensors can be classified depending on the nature of its output data. 
+
+% \noindent \textbf{Analog Sensors.} Analog sensors %, typically consisting of R, L and C elements, operate on the basis of transfer function to 
+% provide an output value, which is continuous-valued. These sensors are noisy and require fine calibration but nevertheless are used due to its simplicity of operation and low cost. While faults in analog sensors are common, recently there have been approaches such as \cite{chakraborty2018fall} which aim at detecting performing fault isolation and detection for such sensors.
+
+% \noindent \textbf{Digital \& Intelligent Sensors.} Digital sensors, on the other hand, provide a binary or discrete representation using an in-built analog-to-digital converter (ADC) \cite{webster_1999}. The key advantage digital sensors provides over analog sensors is the resistance to noise, lesser cabling complexity and ease of analysing and storing the sensor values \cite{analog_digital}. Typically, they use SPI or I2C interfaces and some digital sensors (we refer to them as \textit{intelligent} sensors) come with a light-weight processor that does some pre-processing and filtering of the raw sensor data to achieve such as data denoising. Intelligent sensors typically run proprietary vendor firmware that makes research difficult unless one has a contract with a vendor. Finally, economically, analog sensors are the cheapest while intelligent sensors are the most expensive whereas digital sensors occupy middle-ground. 
+
+% \noindent \textbf{Faults.} Despite being more robust to noise than analog sensors and being equipped with pre-processing components to achieve better signal fidelity, there is little intrinsic support when one or more components fail in a digital sensor. This leads to unpredictable behavior ranging from \textit{false data}, \textit{stuck-at faults} to \textit{no data}. \Eg, a damaged (perhaps due to short circuit or even physical damage to the sensor)  soil moisture sensor can give false alarms or false assurances regarding soil moisture. Currently, one employs techniques such as spatial redundancy by sensor duplication or periodic manual calibration against a known, functional sensor to guard against sensor failure. In addition, these techniques do not identify the root \textit{cause} of the failure - whether it was the on-electronics that degraded or if it is due to failure of the sensing subsystem. Today, there are many industries such as manufacturing systems \cite{potok2018sdcworks}, agriculture \cite{patil2016model}, smart cities \cite{arasteh2016iot} that rely on digital sensors for its core operations and rely on proper functioning of sensors for providing real-time analytics and enhancing operating efficiency.  
+
+% We look at Passive Infra-Red (PIR) sensors and Mass Air Flow (MAF) sensors which are two canonical examples of digital sensors. For the remainder of this section, we look at understanding the \textit{operational physics}  of these sensors, and leverage this to gain a \textit{subsystems view} of the sensor. This will enable us to systematically develop a taxonomy of failures in these sensors. 
+
+%\subsection{Passive Infra-Red (PIR) Sensors}
+
+% Passive Infra-Red (PIR) sensors are the predominant class of commodity human occupancy sensors used in buildings and industries for applications such as security alarms and electric lighting. The raw data from a PIR sensor is a binary output which indicates presence (LOW) or absence (HIGH) of a human object. PIR sensors are also used for composite applications beyond detection \eg Narayana \etal uses an array of PIR sensors to characterize the dimension of a human object and also perform localization within a space \cite{narayana2015pir}. 
+
+% These sensors consist of a front face of an arrangement of optics (\viz fresnel lens and mirrors) feeding light into a pyroelectric element housed in an insulated casing connected to electronics aiding interfacing to other components in the IoT subsystem. Commonly available PIR sensors come in 2 form factors - integrated modules (Fig. \ref{fig:pir_sensor_module}) and evaluation boards. Integrated modules are pre-configured for end-user installation whereas evaluation boards allow re-configurability by giving capability to change individual sensor components as well as give electrical points to tap into different signals in the sensor circuitry. 
+
+% \begin{figure}
+% \vspace*{-1\baselineskip}
+% \centering
+% \includegraphics[scale=0.25]{figures/pir/pictures/pir-sensor-module.png}
+% %\vspace*{-1.0\baselineskip}
+% \caption{A commodity PIR sensor consisting of a plastic Fresnel lens cap focusing invisible infrared rays into a pyroelectric element beneath the cap. The sensor comes with supporting electronics to amplify, denoise and process the output from the pyroelectric element}
+% \vspace*{-1\baselineskip}
+% \label{fig:pir_sensor_module}
+% \end{figure}
+
+% \begin{figure}
+% \centering
+% \includegraphics[width=2.5in]{figures/pir/pictures/pir-sensor-evaluation-kit.jpg}
+% %\vspace*{-1.0\baselineskip}
+% \caption{PIR sensor evaluation kit to fingerprint the sensors in hardware}
+% \vspace*{-1\baselineskip}
+% \label{fig:pir_sensor_evm}
+% \end{figure}
+
+\textit{Type of Sensor} PIR is a passive sensor, which means that the sensing element does not consume power externally. 
+
+\subsubsection{Warm-up Behavior} \ashish{@Sumukh - could you fill this in? You can refer to Figure 17 and 18 at the end of this paper which you had collected}
+
+\subsection{Failure Signature} Recall above that the PIR sensors have 2 critical signals \viz $C_{out}$ and $A_{out}$ with $C_{out}$ being a discretized representation of the analog signal $A_{out}$. We characterize both of these signals to develop a \textit{failure signature} of the PIR sensor that can be used for classifying and identifying faults. We argue that the $A_{out}$ signal - \ca contains information characterizing the sensor and \cb can be used to detect and identify failures. These signals are used, in combination, because of two desirable characteristics:
+\begin{itemize}
+    \item \textit{Independent of Environment} \ashish{correction reqd.}
+    \item \textit{Unique}
+\end{itemize}
+
+Examples of $A_{out}$ are shown in Figure~\ref{fig:pir_sensor_evm}-Figure~\ref{fig:msr_cafeteria}. We characterize the harmonic oscillations in $A_{out}$ to determine the \textit{working status} of different subsystems in the sensor.  We perform this using a frequency domain representation of the $A_{out}$ signal using Fast fourier transform coefficients and its variant power spectral density. 
+
+% \begin{figure*}
+% 	\centering
+% 	\subfloat[\label{}]{%
+% 		\includegraphics[width=0.32\linewidth]{figures/pir/working/signature/cafeteria/cafeteria-FFTAou.png}}
+% 	\subfloat[\label{}]{%
+% 		\includegraphics[width=0.32\linewidth]{figures/pir/working/signature/sensor1/working_data_run4_formatted-FFTAou.png}}
+% 	\subfloat[\label{}]{%
+% 		\includegraphics[width=0.32\linewidth]{figures/pir/working/signature/sensor2/working_data_with_obstacle_run2_formatted-FFTAou.png}}\\
+% 	\subfloat[\label{}]{%
+% 		\includegraphics[width=0.32\linewidth]{figures/pir/working/signature/sensor3/PIR_EVM_Charac_WithObstacle-FFTAou.png}}
+% 	\subfloat[\label{}]{%
+% 		\includegraphics[width=0.32\linewidth]{figures/pir/working/signature/sensor4/pir_evm_raw_data-FFTAou.png}}
+% 	\subfloat[\label{}]{%
+% 		\includegraphics[width=0.32\linewidth]{figures/pir/working/signature/slow_obstacle/slow_obstacle-FFTAou.png}}
+% 	\caption{Failure signature in 6 fully function sensors captured in different environment show presence of the frequencies between 0-5Hz and negligible outside that}
+% 	\label{fig:signature}
+% \end{figure*}
+
+
+\subsubsection{Type of lens} The pattern of $A_{out}$ upon obstacle detection depends on the type of lens installed - \ca inline lens (Fig~\ref{fig:pir_sensor_wall_mount}), or \cb round lens (Fig~\ref{fig:pir_sensor_ceiling_mount}). Typically, round lenses were used in PIR sensors deployed on ceilings and inline lenses in wall-mount PIR sensors. The sensors differ in 2 aspects - \begin{itemize} \item The duration of the $A_{out}$ pulse upon obstacle detection depend on the type of the lens \viz in case of inline lens, each pulse is of 5 ms (\ie slower) and in case of round lens, it is of 3 ms (\ie faster), \item The number of zero-crossings of $A_{out}$ in case of round lens is larger (\viz 5) in comparison with inline lens (\viz 3),
+\item Return back to zero of the last oscillation is much slower for inline lens as compared to round lens.
+\end{itemize}
+
+\subsubsection{A note on speed of obstacle} The detection pulse on $A_{out}$ is dependent on the rate of coverage of the angular detection region. Therefore a very fast obstacle moved in front of the sensor would trigger rapid oscillations in the detection pulse. However, this does not affect our fault detection approach for 2 reasons - \ci We observe that the nature of $A_{out}$ is deterministic for naturally observed speeds in buildings such as a human walking or a hand waving (\eg Fig.~\ref{fig:msr_cafeteria}), and \cii Our goal is not to determine the size or speed of the object but to detect faults in the sensors. Additionally, we can perform the fault detection process over multiple time windows to filter out false positives. An example run with a fast-moving obstacle is as shown in Figure~\ref{fig:pir_sensor_fast_obstacle}. 
+
+\begin{figure}
+\centering
+\includegraphics[scale =0.25]{figures/pir/working/FastObstacle/working_data_run3_formattedfast-obstacle.png}
+\caption{$A_{out}$ when the obstacle is moving rapidly.}
+\label{fig:pir_sensor_fast_obstacle}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale =0.25]{figures/pir/working/MSRCafeteria/cafeteriacafeteria-withoutinset.png}
+\caption{$A_{out}$ in a practical deployment at a cafeteria in Bangalore showing the constituent frequencies present.}
+\label{fig:msr_cafeteria}
+\end{figure}
+
+
+
+
+
+%%BEG OF COMMENT
+\begin{table*}[htb]
+  \centering
+    \begin{tabular}{| p{2cm}| m{7cm} | m{7cm} | }
+        \hline
+        \bfseries Sensor Type & 
+        \bfseries Time Domain &  
+        \bfseries Frequency Domain Spectrum \\ \hline 
+        
+        \hline
+        Working Sensor &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/Working/working_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/Working/working_obstacle/Spectrogram.png}
+        \end{minipage} \\ 
+        
+        \hline
+        Class I Faulty (Lens Dislodged ~ 45$^{\circ}$) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensdislodged_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensdislodged_obstacle/Spectrogram.png}
+        \end{minipage} \\ 
+
+        \hline
+        Class I Faulty (Lens off) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensoff_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensoff_obstacle/Spectrogram.png}
+        \end{minipage} \\        
+        
+        \hline
+        Class II Faulty (Lens Deformed) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lensdeformed_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lensdeformed_obstacle/Spectrogram.png}
+        \end{minipage} \\            
+        
+        \hline
+        Class II Faulty (Lens Puncture) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lenspuncture_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lenspuncture_obstacle/Spectrogram.png}
+        \end{minipage} \\ 
+        \hline
+        
+    \end{tabular}
+  \caption{Basic Characterization of PIR Sensors}
+  \label{tbl:basic_char}
+\end{table*}
+
+
+\begin{table*}[htb]
+  \centering
+    \begin{tabular}{| p{2cm}| m{7cm} | m{7cm} | }
+        \hline
+        \bfseries Sensor Type & 
+        \bfseries Time Domain &  
+        \bfseries Frequency Domain Spectrum \\ \hline 
+        
+        \hline
+        Class III Faulty  (Dust) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/dust_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/dust_obstacle/Spectrogram.png}
+        \end{minipage} \\
+        
+        \hline
+        Class III Faulty  (Paper) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/paper_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/paper_obstacle/Spectrogram.png}
+        \end{minipage} \\
+        
+        \hline
+        Class IV Faulty  (Window Damage - Oil) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIV/windowdamageoil_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIV/windowdamageoil_obstacle/Spectrogram.png}
+        \end{minipage} \\
+        
+        \hline
+        Class V Faulty  (Electronic Fault) &         
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassV/electronicfault_obstacle/Cout-Aout.png}
+        \end{minipage} & 
+        \begin{minipage}{.35\textwidth}
+        \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassV/electronicfault_obstacle/Spectrogram.png}
+        \end{minipage} \\
+        \hline 
+        
+
+    \end{tabular}
+  \caption{Basic Characterization of PIR Sensors (Contd)}
+  \label{tbl:basic_char_contd}
+\end{table*}
+
+%%END OF COMMENT
+
+% \begin{table*}[htb]
+%   \centering
+%     \begin{tabular}{| p{2cm}| m{7cm} | m{7cm} | }
+%         \hline
+%         \bfseries Sensor Type & 
+%         \bfseries Time Domain &  
+%         \bfseries Frequency Domain Spectrum \\ \hline 
+        
+%         \hline
+%         Working Sensor &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/Working/working_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/Working/working_obstacle/Spectrogram.png}
+%         \end{minipage} \\ 
+        
+%         \hline
+%         Class I Faulty (Lens Dislodged ~ 45$^{\circ}$) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensdislodged_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensdislodged_obstacle/Spectrogram.png}
+%         \end{minipage} \\ 
+
+%         \hline
+%         Class I Faulty (Lens off) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensoff_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassI/lensoff_obstacle/Spectrogram.png}
+%         \end{minipage} \\        
+        
+%         \hline
+%         Class II Faulty (Lens Deformed) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lensdeformed_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lensdeformed_obstacle/Spectrogram.png}
+%         \end{minipage} \\            
+        
+%         \hline
+%         Class II Faulty (Lens Puncture) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lenspuncture_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassII/lenspuncture_obstacle/Spectrogram.png}
+%         \end{minipage} \\ 
+%         \hline
+        
+%     \end{tabular}
+%   \caption{Basic Characterization of PIR Sensors}
+%   \label{tbl:basic_char_contd_cont}
+% \end{table*}
+
+
+% \begin{table*}[htb]
+%   \centering
+%     \begin{tabular}{| p{2cm}| m{7cm} | m{7cm} | }
+%         \hline
+%         \bfseries Sensor Type & 
+%         \bfseries Time Domain &  
+%         \bfseries Frequency Domain Spectrum \\ \hline 
+        
+%         \hline
+%         Class III Faulty  (Dust) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/dust_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/dust_obstacle/Spectrogram.png}
+%         \end{minipage} \\
+        
+%         \hline
+%         Class III Faulty  (Paper) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/paper_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIII/paper_obstacle/Spectrogram.png}
+%         \end{minipage} \\
+        
+%         \hline
+%         Class IV Faulty  (Window Damage - Oil) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIV/windowdamageoil_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassIV/windowdamageoil_obstacle/Spectrogram.png}
+%         \end{minipage} \\
+        
+%         \hline
+%         Class V Faulty  (Electronic Fault) &         
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassV/electronicfault_obstacle/Cout-Aout.png}
+%         \end{minipage} & 
+%         \begin{minipage}{.35\textwidth}
+%         \includegraphics[width=\linewidth]{figures/frequency/FreshCharacterization/ClassV/electronicfault_obstacle/Spectrogram.png}
+%         \end{minipage} \\
+%         \hline 
+        
+
+%     \end{tabular}
+%   \caption{Basic Characterization of PIR Sensors (Contd)}
+%   \label{tbl:basic_char_contd_contd_contd}
+% \end{table*}

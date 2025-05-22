@@ -1,0 +1,31 @@
+\renewcommand\algorithmiccomment[1]{%
+{\it /* {#1} */} %
+}
+\renewcommand{\algorithmicrequire}{\textbf{Input: }}
+\renewcommand{\algorithmicensure}{\textbf{Output: }}
+\renewcommand{\algorithmicforall}{\textbf{for each}}
+\begin{algorithm}%[H]
+\footnotesize
+	\begin{algorithmic}[1]
+	        \STATE \algorithmicrequire{Given the \aout signal, Supervised learning model $M$, window size $W$}
+	        \STATE \algorithmicensure{Return if the sensor is working or faulty with the type of fault, if applicable}
+            \IF {No occupancy}
+                \STATE  \COMMENT{Use variance-based threshold to determine faults }
+                \STATE $var \gets variance (A_{out}[1:W])$
+                \IF{$var$ < $T_L$}
+                    \RETURN \textsc{Fault: Lens cap is covered}
+                \ELSIF{$var$ > $T_H$}
+                    \RETURN \textsc{Fault: Lens cap has fallen off}
+                \ELSE
+                    \RETURN \textsc{Working: No lens-related fault}
+                \ENDIF
+            \ELSE
+                \STATE \COMMENT{Transform signal to frequency domain}
+                \STATE ($F_1, F_2, F_3, \ldots, F_{N})$) $\gets$ FFT\_Coeff ($A_{out}[1:W]$)
+                \STATE \textsc{Fault\_type} $\gets$ M($F_1, F_2, F_3, \ldots, F_{N}$)
+                \RETURN \textsc{Fault\_type}
+            \ENDIF
+    \end{algorithmic}
+\caption{PIR Sensor Lens Fault Detection Algorithm}
+\label{alg:fault_detection}
+\end{algorithm}

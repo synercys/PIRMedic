@@ -1,0 +1,69 @@
+%%%%%%%%%%%%%%%%AUTHOR COMMENTS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif \ifdraft
+\drafttrue % draft mode on, turns all comments on, DO NOT SUBMIT WITH THIS
+%\draftfalse % draft mode off, turns all comments off
+
+\newcommand{\akshay}[1]{\ifdraft \textbf{\sffamily\textcolor{purple}{[#1 -- Akshay]}} \else \fi}
+\newcommand{\sumukh}[1]{\ifdraft \textit{\textcolor{magenta}{[#1 -- Sumukh]}} \else \fi}
+\newcommand{\ashish}[1]{\ifdraft \textcolor{red}{#1 -- Ashish} \else \fi}
+\newcommand{\ins}[1]{\ifdraft \textcolor{red}{#1} \else \fi}
+\newcommand{\sibin}[1]{\ifdraft \textit{\textcolor{blue}{[#1 -- Sibin]}} \else \fi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\eg}{{\it e.g.,}\xspace}
+\newcommand{\viz}{{\it viz.,}\xspace}
+\newcommand{\Eg}{{\it E.g., }}
+\newcommand{\etal}{{\it et~al.}\xspace}
+\newcommand{\ie}{{\it i.e.,}\xspace}
+\newcommand{\etc}{{\it etc.}}
+\newcommand{\ci}{{\it (i) }}
+\newcommand{\cii}{{\it (ii) }}
+\newcommand{\ciii}{{\it (iii) }}
+\newcommand{\civ}{{\it (iv) }}
+\newcommand{\ca}{{\it (a) }}
+\newcommand{\cb}{{\it (b) }}
+\newcommand{\cc}{{\it (c) }}
+\newcommand{\cd}{{\it (d) }}
+\newcommand{\ce}{{\it (e) }}
+\newcommand{\cf}{{\it (f) }}
+\newcommand{\cg}{{\it (g) }}
+\newcommand{\ch}{{\it (h) }}
+%\newcommand{\ci}{{\it (i) }}
+\newcommand{\cj}{{\it (j) }}
+\newcommand{\ck}{{\it (k) }}
+\newcommand{\cl}{{\it (l) }}
+\newcommand{\cm}{{\it (m) }}
+\newcommand{\cn}{{\it (n) }}
+\newcommand{\co}{{\it (o) }}
+\newcommand{\cp}{{\it (p) }}
+\newcommand{\cq}{{\it (q) }}
+%\newcommand{\note}{{\bf Note: }}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{53}}
+\newcommand{\cout}{$C_{\text{out}}$\xspace}
+\newcommand{\aout}{$A_{\text{out}}$\xspace}
+\newcommand{\tampered}{$S_{\text{tampered}}$\xspace}
+\newcommand{\working}{$S_{\text{working}}$\xspace}
+\newcommand{\couttampered}{$C_{\text{out,tampered}}$\xspace}
+\newcommand{\coutworking}{$C_{\text{out,working}}$\xspace}
+
+%% Table row coloring 
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\colorlet{tableheadcolor}{gray!25} % Table header colour = 25% gray
+\newcommand{\headcol}{\rowcolor{tableheadcolor}} %
+\colorlet{tablerowcolor}{gray!25} % Table row separator colour = 
+\colorlet{tablerowcolor2}{gray!12} % Table row separator colour = 10% gray
+\newcommand{\rowcol}{\rowcolor{tablerowcolor}} %
+\newcommand{\rowcollight}{\rowcolor{tablerowcolor2}} %
+
+
+% Commands for Highlighting text -- non tikz method - copied from Sibin paper
+\newcommand{\highlight}[2]{\colorbox{#1!17}{#2}}
+\newcommand{\highlightdark}[2]{\colorbox{#1!47}{#2}}
+
+\newcommand{\sol}{{PIRMedic}\xspace}
+
+% For the blue circles in the overview picture
+\definecolor{ultramarine}{RGB}{68,114,196}
+\DeclareRobustCommand\circled[1]{\tikz[baseline=(char.base)]{\node[shape=circle,fill=ultramarine,inner sep=1pt] (char) {\textcolor{white} {#1}};}}
+

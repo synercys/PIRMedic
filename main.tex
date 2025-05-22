@@ -1,0 +1,36 @@
+\documentclass[manuscript]{acmart}
+\input{dependencies/packages}
+\input{dependencies/custom_commands}
+\AtBeginDocument{%
+	\providecommand\BibTeX{{%
+			Bib\TeX}}}
+
+\begin{document}
+\date{}
+\title{Physics-based Fault Analysis for Commodity PIR Sensors}
+\titlenote{PIRMedic was first introduced as a conference paper in ACM BuildSys~\cite{10.1145/3486611.3486658}. In this work, we expand upon on \sol and provide additional insights on the different classes of faults. We accomplish this by adding a threshold-based technique to study Class I and III faults (\S\ref{subsec:aout_quiet_times}) and including experiments using the threshold algorithm to distinguish between them by evaluation in a cafeteria (\S\ref{subsubsec:cafeteria}). We also study the impact of incremental failures on Class III faults giving insights into impact of gradual degradation on the \aout signal with incremental accumulation of dust(\S\ref{subsec:incremental_dust}). Additionally, we study the impact of different types of foreign particles such as paper and tape on the sensor performance (\S\ref{subsec:foreign_additional}). More generally, we include a quantitative study to compare the impact of various faults on sensor performance (\S\ref{subsec:quantify} and Table~\ref{tbl:fault_degree}). We also study the fault detection accuracy of \sol as a function of pre-deployment training dataset size (\S\ref{subsec:fail_detection}). Lastly, we have study the nature of \aout from ceiling-mount PIR sensors (Fig.~\ref{fig:round_lens}). We have also made some editorial changes by: \ca adding a goals subsection in \S\ref{sec:intro}, \cb updating other physics-related sensor failure related work~\cite{10.1145/3458864.3466869, 10.1145/3576842.3582386}, \cc adding a Frequently Asked Questions (FAQs) summarizing some of the common questions in the appendix and lastly \cd including a 3D visualization of the PIR sensor drawn in Tinker CAD and adding more text explaining the different sensor subsystems.}
+\input{Sections/0000_Authors}
+\input{Sections/00_Abstract}
+\input{dependencies/acm_headers}
+\maketitle
+\input{Sections/01_Introduction}
+\input{Sections/02_RelatedWork}
+%%% Outline of paper as Akshay suggested
+\input{Sections/000_Outline}
+%\input{Sections/03_Background}
+\input{Sections/Failures}
+\input{Sections/CharacterizeFailures}
+\input{Sections/FaultDetection}
+\input{Sections/Implementation}
+\input{Sections/05_ExperimentalSetup}
+\input{Sections/06_CharacterizationofFaults}
+\input{Sections/075_Discussion}
+\input{Sections/08_Conclusion}
+\input{Sections/Acknowledgments}
+\bibliographystyle{plain}
+%\newpage
+\balance
+\bibliography{Sections/09_ref_full.bib}
+\input{Sections/10_Appendix}
+\end{document}
+ 

@@ -1,0 +1,7 @@
+\subsubsection{Processing $A_{out}$} We note that the $A_{out}$ signal is a composite signal and consists of - \ca the operational characteristics of a number of sensor subsystems  and \cb the environmental effects caused by the presence or lack of an obstacle.
+
+From our analysis of the nature of $A_{out}$, we observe that it is around 1.8V (or 300 units on a 1024-unit ADC). This number can be derived based on empirical measurements (\ie when the sensor is deployed and is fault free) or from datasheets of the sensor. 
+
+\subsubsection{Windows} We split the signal into non-overlapping windows of duration ranging from 5 second to 20 seconds. The duration of analysis is inspired by the speed of human motion. The method of windowing aid in performing signal analysis in a piecemeal manner, as in common in signal processing applications ~\cite{}.
+
+\subsubsection{Zero Average} In every window, we make the mean of the signal to be zero by subtracting the window average from every $A_{out}$ sample in the window.
