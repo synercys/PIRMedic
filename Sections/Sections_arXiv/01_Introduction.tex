@@ -1,0 +1,90 @@
+\section{Introduction}
+\label{sec:intro}
+
+Cyber-Physical and IoT Systems such as smart homes, industrial control and healthcare systems often require the correct functioning of a myriad set of sensors. 
+These sensors measure the surrounding environment in the form of either an arithmetic value (\eg temperature of 72\degree F) or a logical value (\eg presence or absence of smoke) and, trigger computations and actions.
+Typically, these sensor data measurements are used by data-driven IoT analytics pipelines (\eg Microsoft Azure IoT) to derive insights and make higher-level decisions. 
+One of the most versatile and ubiquitous sensors used in numerous modern applications is a Passive Infra-Red (PIR) sensor.
+A PIR sensor is a discrete, electronic sensor that captures thermal radiation from human and human-like objects (\eg animals) to indicate occupancy in a region. %
+They are used in a wide-variety of environments -- \eg in offices to achieve energy savings in buildings (for automatic control of lighting and HVAC systems) and in safety-critical cyber-physical systems (CPS) like factory floors for intrusion detection.
+Naturally, these applications mandate the correctness and fidelity of data \ie the data being a faithful representation of occupancy.
+
+Given the nature of PIR deployments in the wild : for instance in remote, manually inaccessible, harsh conditions (\eg assembly line of a factory), they are prone to failures and degradation of physical components.
+These failures could result in false triggers or a failure to capture real movements \eg assembly line failures in a factory, inaccurate estimation of wildlife counts, conference room lights turning off or even doors not opening in spite of occupancy.
+Such sensor failures are often caused by intermittent sensor faults that can happen in any one of its internal physical components~\cite{chakraborty2018fall,marathe2021currentsense}.
+
+
+
+
+
+
+
+\begin{wrapfigure}{R}{0.5\textwidth}
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/motivation/motivation-physics-technique.png}
+	\caption{\footnotesize{Sensor Data} from a working PIR (top) and a faulty PIR (bottom). HIGH indicates no object, HIGH$\rightarrow$LOW transition indicates object.}
+	\label{fig:occupancy_sensor_data}
+\end{wrapfigure}
+
+
+
+
+Currently, failures in PIR sensor deployments are usually addressed in one of the following two ways : \ca using an additional, auxiliary sensor such as a CCTV camera combined with image processing algorithms (say to validate the occupancy data) or \cb using high-grade PIR sensors that possesses additional capabilities such as ultrasonic sensors and intricate optics. This makes the sensor deployment very expensive. %
+In addition, deployments need to be refreshed periodically by replacing old sensors with new ones and the former are disposed off %
+adding to both electronic waste and cost. A case in point is our university research building where the occupancy sensor deployed is a high-grade PIR sensor comprising both ultrasonic and infrared sensors, resulting in a \emph{total recurring cost of close to \$100000 every 10 years}\footnote{Our 4-floor building (with a total of 244 rooms and 24 aisle areas) has more than 300 occupancy sensors. Each PIR sensor costs \$300~\cite{hubbell_ADT1600WRP, hubbell_ATD2000CRP} with it being refreshed every 10 years, a worst-case recurring cost of \$90000 every 10 years, which is expensive.}.
+
+
+
+
+Crucially, \textit{current approaches do not diagnose the cause of failures or perform any analysis of sensor performance}, that can be valuable for IoT %
+engineers during maintenance, repair and testing. For example, in one of our deployments, we observed that failed or degraded sensors can exhibit unpredictable behavior \eg they can work temporarily for a period of time and then fail sometimes. {\bfseries  Fig.~\ref{fig:occupancy_sensor_data}} shows a plot of output data from the sensor vs. time for both a working sensor and a faulty sensor (defective lens) over a period of 4 hours.
+In this plot, a transition from HIGH$\rightarrow$LOW denotes a person coming into the field of view %
+and a value of HIGH indicates that there is no person. %
+We observe that the faulty sensor works intermittently and at other times, can miss a person (false negative) or incorrectly flag the presence of a person (false positive).
+Missing a person can cause a potentially critical failure in applications such as door opening systems or emergency shutdowns on factory floors.
+We show that accurate detection of such failures is possible by \textit{characterizing the internals of the sensor.}
+
+
+
+
+\emph{Our solution, \sol detects and diagnoses failures of PIR sensors by characterizing the physics of sensing} \viz the fresnel lens optics and the pyroelectric effect. %
+To keep the cost of the deployment low, \sol is implemented on the edge platforms of the deployment and targets commodity PIR sensors.
+In this process, %
+we \emph{devised a taxonomy of key failures for aiding diagnosis and repair.} 
+
+Specifically, we demonstrate that a signal intrinsic to PIR sensors~\viz the \textit{intermediate analog output from the pyroelectric element, referred to as \aout} ({\bfseries Fig.~\ref{fig:pir_sensing_pipeline}}) can be used for %
+fault detection and diagnosis. %
+We utilize this signal to derive information about reliability of the PIR sensor platform as well as to perform an analysis into the different failure modalities. \textit{To the best of our knowledge, this is the first edge-based, low-cost approach to use an intrinsic signal (\aout) for fault detection and diagnosis of PIR sensors.} We analyze the behavior of \aout in detail, under %
+practical deployments, with realistic occupancy
+over a wide variety of observed failures. 
+
+\noindent \textbf{Summary of Contributions:}
+\begin{enumerate}[leftmargin=*]
+	\itemsep0pt
+	\item \textit{From physics to failures:} We use the working of a PIR sensor to understand the process of object detection and infer the key points where failures could lead to incorrect sensor data,
+	\item \textit{Failure taxonomy:} We study the impact of different failures on the sensor performance and systematize the key failures into a failure taxonomy. We also provide a quantitative method to study the severity of failures.
+	
+	\item \textit{Non-intrusive, online fault detection and diagnosis:} We present an online technique (does not require any disassembling), \emph{implemented at the edge}, for failure detection as well as diagnosis by utilizing the intermediate, analog output from the pyroelectric element in the PIR sensor (\aout). 
+	\item \textit{Insights from Real-world Deployments:} We show the efficacy of the proposed techniques using a deployment of 15 PIR sensors in four practical occupancy scenarios over a period of 3 months.
+\end{enumerate}
+
+
+
+
+\noindent \textbf{Goals:}
+
+\begin{enumerate}[leftmargin=*]
+	\itemsep0pt
+	
+	\item {\itshape Detect failures:} Sensors can give faulty data due to the incorrect operation of various physical components involved in the sensing process. We seek to detect and isolate such failed sensors. %
+	
+	\item {\itshape Diagnose failures:} In addition to detecting failures, we perform failure diagnosis to identify the cause of the failure. We use domain-knowledge of the sensing physics and our understanding of how different failures can impact the physics. This aids in repair and performing quality-control checks.
+	
+	\item {\itshape Edge-based solution:} \sol is tailored for edge platforms (Raspberry Pi, Arduino Microcontrollers) that are interfaced directly to multiple sensors, say via GPIO. %
+	Edge-based reliability solutions allows us to reject data from faulty sensors in IoT deployments thus saving the cost of both \ca the edge to cloud network bandwidth and \cb cloud compute consumed by faulty data.
+	
+	\item {\itshape Target Audience:} \sol benefits two sections of the community: \ca engineers developing and deploying IoT/Edge computing for occupancy sensors (\eg Smart Buildings), \cb manufacturers of occupancy sensors can use the insights from this work towards future PIR sensor hardware designs.
+	
+\end{enumerate}
+
+
