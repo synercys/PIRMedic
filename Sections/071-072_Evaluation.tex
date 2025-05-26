@@ -1,5 +1,3 @@
-
-
 \section{Evaluation}
 \label{sec:evaluation}
 The evaluation is intended to answer the following questions -- \ca can we detect failures~\ie separate faulty PIR sensors from working ones? and \cb what can we learn about the failure? In other words, can we perform diagnosis that can aid in replacing or repairing the sensor? We answer these questions in practical deployments, %
@@ -8,10 +6,6 @@ each consisting of the following stages:
 \ca {\bfseries Stage I: Failure Detection} The goal of this stage is to isolate defective, faulty sensors from functional, working sensors. Note that we do not diagnose the failure in this stage \ie the sensors deemed faulty could be so due to multiple, as yet unknown reasons.\\
 \hspace*{2ex}\cb {\bfseries Stage II: Failure Diagnosis} In this stage, we diagnose the failure by mapping it to the taxonomy defined in \S\ref{subsec:taxonomy}. Using the taxonomy as a reference, we seek to conclude whether it is the lens, pyroelectric or electronics subsystem that contains the failure.\\
 \hspace*{2ex}\cc {\bfseries Stage III: Fine-Grained Fault Analysis} In this stage, we learn details about the failure as precisely as possible. \Eg if we attribute a fault to be Class III failure, we seek to narrow it down to see if it is due to deposition of dust or paper on the lens.
-
-
-
-
 
 \subsection{Real-world Deployments}
 \label{subsec:deployment}
@@ -80,14 +74,6 @@ over a duration of 3 months and collected data both during times of low occupanc
 \end{figure*}
 
 
-
-
-
-
-
-
-
-
 \subsubsection{Deployment in a University Elevator (US)}\label{subsubsec:elevator} 
 We deployed working and faulty sensors along the inside wall of an elevator in our university research building (middle {\bfseries Fig.~\ref{fig:pir_deployment_scenario}}). 
 The data collection captured scenarios of both high and low occupancy during and outside of business hours. %
@@ -144,33 +130,6 @@ Upon extracting the features of the \aout signals, and classifying it using the 
 we observe the confusion matrix as shown in {\bfseries Fig.~\ref{fig:lobby_classification_results}}. The high fraction along the diagonal shows that a majority of sensor failures are classified and identified correctly, as the features are able to bring out differences in the physics of failures.
 Note that we observe some misclassifications of sensor faults (\eg for C). We argue that this is due to the deployment area of a lobby being open and the limited coverage area of the sensor, both of which can lead to imperfect capture at the periphery. Consequently, for traffic at the edges of field of view, this reduced thermal radiations could lead to some misclassifications. %
 
-
-
-
-\subsubsection{Deployment in a Starbucks (US)}\label{subsubsec:starbucks} 
-We deployed PIR sensors near the ordering queue of the coffee shop during business hours to capture the typical foot traffic (left {\bfseries Fig.~\ref{fig:pir_deployment_scenario}}). 
-Our deployment %
-captured linear, regularized bidirectional movement (entry followed by exit of the region of interest) ({\bfseries Fig.~\ref{fig:deployment_starbucks}}).
-Our deployment lasted for a duration of 4 hours on a busy Friday evening. 
-We observed that out of 226 time windows (each containing 1024 samples), there were missed obstacles across: \ci 27 windows in class I, \cii 35 windows in class II, \ciii 26 windows in class III and no windows in class IV. 
-The missed obstacles and false detection (none in this case) are summarized in {\bfseries Fig.~\ref{fig:coffeeshop_classification_results}}. 
-Using \sol, we observe high fractions along the diagonal of the confusion matrix; hence the predicted label of sensor failure matches the true label.
-
-Furthermore, despite the oil impurity not being enough cause it to alter performance, we still classify it is a separate class from the physics point of view due to its different behavior of \aout from that of a working sensor.
-Thus, in line with the previous deployments, we can use the features of \aout to form a signature of the physics. %
-
-
-
-
-
-
-
-\subsubsection{Deployment in a Cafeteria}\label{subsubsec:cafeteria} To evaluate the analysis of \aout during quiet times, we deployed a mix of 3 types of sensors with lens failures -- lens fallen off, lens covered and some working sensors during the lunch hour at a cafeteria in India. The traffic during lunchtime in the cafeteria is as shown in {\bfseries Fig.~\ref{fig:deployment_msr_cafeteria}}. As these were lens-related failures, we looked at the time-domain characterization of \aout during quiet times to understand the status of lens. The time domain representation of \aout, during a period of no occupancy, is as shown in {\bfseries Fig.~\ref{fig:variance_cap_cases}}. The y-axis is plotted in terms of the 10-bit ADC representations of voltage to highlight the differences. For a 10-bit ADC, 1023 units (\ie $2^{10} - 1$) corresponds to a voltage of 5 V. Therefore, a voltage of 1.8 V corresponds to 340 units. 
-
-We note visually that the noise floor at output of the lens subsystem is higher with the lens dislodged ({\bfseries Fig.~\ref{fig:capoff}}) as compared to both a normal sensor ({\bfseries Fig.~\ref{fig:capon}}) and one with lens covered ({\bfseries Fig.~\ref{fig:capcovered}}). Specifically, we observed a variance of 10 $Volt^2$ when lens was covered, 250 $Volt^2$ when lens was in place and working, and 1500 $Volt^2$ when lens had fallen of completely. Consequently, a low threshold ($T_L$) of 100 $Volt^2$ and a high threshold ($T_H$) of 1000 $Volt^2$ was sufficient to separate between the 3 types of sensors. Note that the variance had to be computed during a quiet period of no traffic in this case. %
-
-
-
 \begin{figure*}
 	\begin{minipage}[t]{0.48\textwidth}
 		\includegraphics[width=6cm]{figures/deployment/bangalore-cafetria/msr-cafeteria-15mins.png}
@@ -180,20 +139,30 @@ We note visually that the noise floor at output of the lens subsystem is higher 
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.48\textwidth}
-			\vspace{-\baselineskip}
-				\begin{tabular}{l c c c c c}
-					\hline
-					\textbf{Training (MB)} & \textbf{32} & \textbf{64} & \textbf{96} & \textbf{112} & \textbf{128} \\
-					\hline \hline
-					Accuracy (\%) & 92.4 & 95.8 & 98.6 & 99.1 & 99.4 \\
-					\hline
-				\end{tabular}
-			\vspace{\baselineskip}
-			\caption{\textbf{Failure detection accuracy} as a function of the size of training dataset}
-			\label{fig:dataset_size}
+		\vspace{-\baselineskip}
+		\begin{tabular}{l c c c c c}
+			\hline
+			\textbf{Training (MB)} & \textbf{32} & \textbf{64} & \textbf{96} & \textbf{112} & \textbf{128} \\
+			\hline \hline
+			Accuracy (\%) & 92.4 & 95.8 & 98.6 & 99.1 & 99.4 \\
+			\hline
+		\end{tabular}
+		\vspace{\baselineskip}
+		\caption{\textbf{Failure detection accuracy} as a function of the size of training dataset}
+		\label{fig:dataset_size}
 	\end{minipage}
 \end{figure*}%
 
+\subsubsection{Deployment in a Starbucks (US)}\label{subsubsec:starbucks}
+We deployed PIR sensors near the ordering queue of the coffee shop during business hours to capture the typical foot traffic (left {\bfseries Fig.~\ref{fig:pir_deployment_scenario}}).
+Our deployment %
+captured linear, regularized bidirectional movement (entry followed by exit of the region of interest) ({\bfseries Fig.~\ref{fig:deployment_starbucks}}).
+Our deployment lasted for a duration of 4 hours on a busy Friday evening.
+We observed that out of 226 time windows (each containing 1024 samples), there were missed obstacles across: \ci 27 windows in class I, \cii 35 windows in class II, \ciii 26 windows in class III and no windows in class IV. The missed obstacles and false detection (none in this case) are summarized in {\bfseries Fig.~\ref{fig:coffeeshop_classification_results}}.
+Using \sol, we observe high fractions along the diagonal of the confusion matrix; hence the predicted label of sensor failure matches the true label.
+
+Furthermore, despite the oil impurity not being enough cause it to alter performance, we still classify it is a separate class from the physics point of view due to its different behavior of \aout from that of a working sensor.
+Thus, in line with the previous deployments, we can use the features of \aout to form a signature of the physics. %
 
 \begin{figure}%
 	\centering
@@ -219,14 +188,14 @@ We note visually that the noise floor at output of the lens subsystem is higher 
 	\label{fig:variance_cap_cases}
 \end{figure}
 
+\subsubsection{Deployment in a Cafeteria}\label{subsubsec:cafeteria} To evaluate the analysis of \aout during quiet times, we deployed a mix of 3 types of sensors with lens failures -- lens fallen off, lens covered and some working sensors during the lunch hour at a cafeteria in India. The traffic during lunchtime in the cafeteria is as shown in {\bfseries Fig.~\ref{fig:deployment_msr_cafeteria}}. As these were lens-related failures, we looked at the time-domain characterization of \aout during quiet times to understand the status of lens. The time domain representation of \aout, during a period of no occupancy, is as shown in {\bfseries Fig.~\ref{fig:variance_cap_cases}}. The y-axis is plotted in terms of the 10-bit ADC representations of voltage to highlight the differences. For a 10-bit ADC, 1023 units (\ie $2^{10} - 1$) corresponds to a voltage of 5 V. Therefore, a voltage of 1.8 V corresponds to 340 units.
 
-
+We note visually that the noise floor at output of the lens subsystem is higher with the lens dislodged ({\bfseries Fig.~\ref{fig:capoff}}) as compared to both a normal sensor ({\bfseries Fig.~\ref{fig:capon}}) and one with lens covered ({\bfseries Fig.~\ref{fig:capcovered}}). Specifically, we observed a variance of 10 $Volt^2$ when lens was covered, 250 $Volt^2$ when lens was in place and working, and 1500 $Volt^2$ when lens had fallen of completely. Consequently, a low threshold ($T_L$) of 100 $Volt^2$ and a high threshold ($T_H$) of 1000 $Volt^2$ was sufficient to separate between the 3 types of sensors. Note that the variance had to be computed during a quiet period of no traffic in this case. %
 
 We now discuss the different stages of \sol, as enumerated in the beginning of this section. 
 
 \subsection{Stage I -- Failure Detection}
 \label{subsec:fail_detection}
-
 
 We aggregated all the sensors (both working and faulty) to \textit{separate faulty sensors (without specifying which class) from working sensors}. 
 We collected FFT coefficients of \aout on a pre-deployment lasting 1 week and performed daily collection of \aout signals from all the deployed sensors. 
@@ -236,13 +205,9 @@ Thus, FFT-based features of \aout were able to capture the physics, and hence se
 We also varied the \textit{size of training dataset} (128 MB corresponds to 1 week pre-deployment) to show the robustness of failure detection in {\bfseries Fig.~\ref{fig:dataset_size}}.
 
 
- 
-
-\begin{wrapfigure}{R}{0.5\textwidth}
+\begin{wrapfigure}{lr}{0.5\textwidth}
 	\centering
 	\includegraphics[width=0.5\textwidth]{figures/classification/FaultDetectionResults.png}
 	\caption{\footnotesize Fault Detection showing that faulty sensors isolated from working sensors by extracting FFT of \aout and using a Random Forest Classifier.}
 	\label{fault_detection_results}
 \end{wrapfigure}
-
-

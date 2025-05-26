@@ -112,27 +112,49 @@ In this prediction, the FFT coefficients push the prediction to that of a faulty
 We now combine the insights gathered from physics and machine learning techniques to develop a unified algorithm, called \sol, that is deployable at the edge, to isolate and diagnose faults.
 \sol consists of 2 stages: \ci pre-deployment (training) stage, wherein the reference \aout values for a set of sensors (both working and faulty) are collected offline and analyzed to extract key features and \cii deployment stage, wherein the features from a operational \aout signal is matched with the previously extracted features in order to detect and isolate faults. We next describe both the stages in detail.
 
-\begin{figure}
+\begin{figure}%
+	\noindent
 	\begin{minipage}[t]{0.26\textwidth}
 		\centering
 		\includegraphics[width=0.9\textwidth]{figures/deployment/predeployment-stage-2.png}
 		\caption{\footnotesize{Pre-deployment stage}.}
 		\label{fig:pre_deployment_steps}
 	\end{minipage}%
-	\hfill
     \begin{minipage}[t]{0.22\textwidth}
 		\centering
 		\includegraphics[width=0.7\textwidth]{figures/deployment/deployment-stage-5.png}
 		\caption{\footnotesize{Deployment stage}.}
 		\label{fig:deployment_steps}
+	\end{minipage}%
+    \begin{minipage}[b]{0.48\textwidth}
+		\centering
+		\footnotesize
+		\captionof{table}{Details of Evaluation Setup used in \sol}
+		\begin{tabular}{p{2.6cm} p{4.1cm}}
+			\hline %
+			\textsc{\bfseries Component} & \textsc{\bfseries Specifications \& Details}\\
+			\hline\hline
+			\rowcolor{gray!20} \multicolumn{2}{l}{\bfseries Data Collection \& Analysis Platform}\\
+			Arduino Mega 2560 Rev3 & ATmega2560 16 MHz with 256 kB Flash \\
+			Raspberry Pi v3.0 Model B & Quad Core 1.2GHz Broadcom BCM2837 64bit CPU, 1GB RAM \\
+			\hline
+			\rowcolor{gray!20} \multicolumn{2}{l}{\bfseries Connectivity \& Power} \\
+			USB Serial Cable & Interface between Raspberry Pi and Arduino Microcontroller\\
+			Power Supply & 5V for Arduino and 3.3V for Raspberry Pi\\
+			\hline
+			\rowcolor{gray!20} \multicolumn{2}{l}{\bfseries Sensor} \\
+			PIR Sensor & Murata PIR Evaluation Board IMX-060 \\
+			\hline
+		\end{tabular}
+		\label{tab:pir_platform}
 	\end{minipage}
-    \hfill
-    \begin{minipage}[t]{0.5\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figures/classification/accuracy_vs_window_size.png}
-		\caption{\footnotesize{Model Accuracy} for different window sizes. We choose 1024 as the default window size.}
-		\label{fig:accuracy_vs_window_size}
-    \end{minipage}
+%    \hfill
+%    \begin{minipage}[t]{0.5\textwidth}
+%        \centering
+%        \includegraphics[width=\textwidth]{figures/classification/accuracy_vs_window_size.png}
+%		\caption{\footnotesize{Model Accuracy} for different window sizes. We choose 1024 as the default window size.}
+%		\label{fig:accuracy_vs_window_size}
+%    \end{minipage}
 \end{figure}
 
 
