@@ -1,11 +1,4 @@
 
-\begin{wrapfigure}{R}{0.25\textwidth}   
-        \centering
-        \includegraphics[width=0.2\textwidth, height=1.3in]{figures/platform/3d_view_5-annotated.jpg}
-        \caption{PIR Sensor Teardown showing the different subsystems illustrated in TinkerCAD}
-        \label{fig:pir_system_teardown}
-\end{wrapfigure}
-
 \section{PIR Sensors}
 \label{sec:approach}
 We take a deep dive into a PIR sensor with 3 goals -- \ca understanding the physics of sensing (\S\ref{subsec:physics}, \S\ref{subsec:working}), \cb correlating physics to the failure scenarios (\S\ref{subsec:taxonomy}) and \cc analyzing the effect of these failures on the sensing performance (\S\ref{subsec:quantify}).
@@ -21,10 +14,14 @@ These subsystems act in sequence \ie Lens $\rightarrow$ Pyroelectric $\rightarro
 Fresnel lenses have a large capture area (aperture) and are used to concentrate radiation into a narrow beam. %
 They are used to divide the entire region observable to the PIR sensor into small cells, which increases range of the sensor by manifolds. 
 They have a large capture area (aperture) and are common in a wide variety of applications such as lighthouses, solar cells and even in optical landing systems in aircrafts~\cite{webster1999measurement}.
-
-
-
-
+%
+\begin{wrapfigure}{lr}{0.25\textwidth}
+	\centering
+	\includegraphics[width=0.2\textwidth, height=1.3in]{figures/platform/3d_view_5-annotated.jpg}
+	\caption{PIR Sensor Teardown showing the different subsystems illustrated in TinkerCAD}
+	\label{fig:pir_system_teardown}
+\end{wrapfigure}
+%
 \noindent \underline{\bfseries Pyroelectric Subsystem} comprises of an optical filter and a pair of pyroelectric elements. The optical filter is designed to filter out thermal radiations from wavelengths outside the human range (i.e., ~ 5 $\mu$m to 10 $\mu$m), which is then incident on the pyroelectric elements. %
 The pyroelectric elements convert the thermal radiation into an electrical voltage signal, a process known as the \textit{pyroelectric effect}. The output of the pyroelectric subsystem is an analog signal that is sent to the electronic subsystem.
 In practice, there are two pyroelectric elements connected in series in a differential configuration. This differential configuration enables the PIR sensor to detect \textit{movement} of objects as static objects will trigger both the pyroelectric elements equally and cancel out unlike moving objects that trigger both elements unequally resulting in an output from the pyroelectric subsystem. %
@@ -34,18 +31,21 @@ Due to the differential output voltage, the pyroelectric subsystem does not meas
 \noindent \underline{\bfseries Electronic Subsystem} consists of a filter (RC filter), amplifier (JFET or OpAmp) and comparator (OpAmp) circuits. The output from pyroelectric subsystem are filtered to remove noise, amplified to increase its magnitude and finally sent to a comparator to convert analog signals to discrete signals. This \textit{discrete signal is HIGH when there is no motion and goes HIGH$\rightarrow$LOW when motion is detected}. Systems connected to a PIR sensor such as lighting or heating use the discrete signal to regulate the illumination or temperature in a building.
 
 
-
-
+\subsection{\textbf{Analysis of Output Signals of a PIR Sensor:}}
+\label{subsec:working}
+There are 2 output signals from a PIR sensor as shown in {\bfseries Fig.~\ref{fig:pir_sensing_pipeline}}:
+\begin{enumerate} \item \textbf{Final discrete output} of the electronic subsystem (\cout) that follows negative logic \ie stays HIGH when there is no motion and goes LOW when motion is detected. \item \textbf{Intermediate analog output} just prior to the discretization process (\aout). \end{enumerate}%
+%
 \begin{figure}
 	\centering
-    \begin{subfigure}[b]{0.4\textwidth} %
-        \begin{flushleft}
-            \includegraphics[width=\textwidth]{figures/platform/pir-block-diagram-2-redraw-camera.png}
-            \caption{Sensing Pipeline of a PIR Sensor}
-            \label{fig:pir_sensing_pipeline}
-        \end{flushleft}
-    \end{subfigure}%
-    \hfill
+	\begin{subfigure}[b]{0.4\textwidth} %
+		\begin{flushleft}
+			\includegraphics[width=\textwidth]{figures/platform/pir-block-diagram-2-redraw-camera.png}
+			\caption{Sensing Pipeline of a PIR Sensor}
+			\label{fig:pir_sensing_pipeline}
+		\end{flushleft}
+	\end{subfigure}%
+	\hfill
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/lens_types/inline_lens.png}
@@ -60,13 +60,8 @@ Due to the differential output voltage, the pyroelectric subsystem does not meas
 	\end{subfigure}	   
 	\caption{Effect of different types of lens on the \aout curve, shown in green -- the inline lens type produces a single oscillation whereas a round lens type produces two oscillation per obstacle. The corresponding \cout, shown in blue, stays HIGH when there is no motion and goes LOW when motion is detected. }
 	\label{fig:pir_sensor_different_lens}
-\end{figure}
-
-\subsection{\textbf{Analysis of Output Signals of a PIR Sensor:}}
-\label{subsec:working} 
-There are 2 output signals from a PIR sensor as shown in {\bfseries Fig.~\ref{fig:pir_sensing_pipeline}}:
-\begin{enumerate} \item \textbf{Final discrete output} of the electronic subsystem (\cout) that follows negative logic \ie stays HIGH when there is no motion and goes LOW when motion is detected. \item \textbf{Intermediate analog output} just prior to the discretization process (\aout). \end{enumerate}
-
+\end{figure}%
+%
 To analyze \cout and \aout during operation, we interface a PIR sensor to an Arduino microcontroller~\cite{arduino_mega}. 
 {\bfseries Fig.~\ref{fig:inline_lens} --~\ref{fig:round_lens}} shows plots of \aout and \cout for a period of 60 seconds, both in the presence and absence of an obstacle. The y-axis represents voltages seen at the output and x-axis represents time. As expected, %
 \cout, marked in blue, goes LOW when an obstacle comes into the field of view %
