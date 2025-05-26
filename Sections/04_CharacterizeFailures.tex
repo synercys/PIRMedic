@@ -83,17 +83,16 @@ To study the effect of gradual failures occurring in Class III, we divided a spa
 \subsection{Analysis of \aout during known quiet times} \label{subsec:aout_quiet_times} We draw some intuition on the behavior of \aout during known times of no occupancy, \eg post business hours in case of office buildings. The intuition stems from the arrangement of pyroelectric elements and its interplay with the lens subsystem. In a working sensor, we observe that due to the precise geometric arrangement of lens and pyroelectric elements, when there is no obstacle, the thermal radiation from the environment falls equally on the two pyroelectric elements, causing it to cancel out and leave very little noise at the output of pyroelectric subsystem. However, when the lens is covered by a foreign substance (\ie Class III fault), some of the thermal radiation is absorbed by the substance, before falling onto the pyroelectric elements. This results in a much lower noise at the output of pyroelectric subsystem. Alternately, if the lens is dislodged (\ie Class I fault), the two pyroelectric elements are not perfectly matched in differential configuration, which leads to higher noise at output of the pyroelectric subsystem. We observe this noise by measuring the \textit{noise floor} in the variance of \aout signal, during times of no obstacle.
 
 Thus, we note that variance of \aout during a period with no occupancy can be used to get hints on Class I (lens dislodged) and Class III faults (lens covered). In particular, compared to a working sensor where the lens is mounted correctly, we expect a drop in variance when the lens is covered and a rise in variance when the lens is dislodged. In other words, $\sigma$(\aout)$|_{Class\ III}$ $\leq$ $\sigma$(\aout)$|_{Working}$ $\leq$ $\sigma$(\aout)$|_{Class\ I}$, where $\sigma$(\aout)$|_{X}$ denotes the variance of \aout under scenario X. We can use this idea to develop a preliminary fault detection algorithm that can be used to screen for lens faults (Class I and III). This requires computing two variance-based thresholds ($T_L$, $T_H$) to deduce status of the lens.
-
-However, we note that using the variance of \aout is not viable in all practical conditions. In particular, using this method works only during \textit{known quiet} times \ie in the known absence of occupancy which can be a \textit{disadvantage} for some deployments. As a result, this approach is suited for preliminary sensor health checks outside office or regular business hours of operation such as weekends. %
-
-\begin{wrapfigure}{L}{10cm}%
+%
+\begin{wrapfigure}{lr}{9.7cm}%
 	\centering
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/2-PIR-Fault/normal-classIII/Aout_normal_vs_plastic.png}
 		\caption{Plastic}
 		\label{fig:pir_sensor_classIII_fault_plastic_tape}
-	\end{subfigure}
+	\end{subfigure}%
+	\hfill
 	\begin{subfigure}[t]{0.3\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/2-PIR-Fault/normal-classIII/Cout_Aout_Paper.png}
@@ -103,15 +102,19 @@ However, we note that using the variance of \aout is not viable in all practical
 	\caption{Effect of different foreign particles producing Class III faults of different degree -- the figures show that when the lens is obstructed with foreign particles like plastic tape and paper, it could result in complete failure.}
 	\label{fig:pir_sensor_different_foreign_particles}
 \end{wrapfigure}
+%
+However, we note that using the variance of \aout is not viable in all practical conditions. In particular, using this method works only during \textit{known quiet} times \ie in the known absence of occupancy which can be a \textit{disadvantage} for some deployments. As a result, this approach is suited for preliminary sensor health checks outside office or regular business hours of operation such as weekends. \\%
 
 \subsection{Analysis of different types of foreign particles} \label{subsec:foreign_additional}Different materials have distinct thermal characteristics and thus affect the \aout response differently in case of Class III faults. Stated alternately, the amplitude shaping of \aout varies depends on the material and its quantity. There are 3 kinds of foreign particles we study in our setup -- \ca paper, \cb plastic tape and \cc dust. We saw in {\bfseries Fig.~\ref{fig:pir_sensor_controlled_c}} how deposition of dust can compromise with the \aout responses. {\bfseries Fig.~\ref{fig:pir_sensor_different_foreign_particles}} shows Class III fault scenarios repeated with plastic tape and paper. In each of these runs, a normal sensor (represented in the blue curve in {\bfseries Fig.~\ref{fig:pir_sensor_classIII_fault_plastic_tape}}) detects obstacles as demonstrated by the \aout variation, whereas foreign particles such as paper and plastic tape can lead to a \textit{complete failure} of the PIR sensor.
 
+\subsection{Frequency Domain Characterization} \label{subsec:freq_char} %
+We have showed \aout signal has hints about various failure scenarios. %
+To get additional insights, we transform the time domain \aout signal into frequency domain using the Fast Fourier transform (FFT) to derive robust features. FFT offers high resolution in the frequency domain and deconstructs the frequencies and harmonics present in a signal. Frequency domain representations have been used to characterize human activities using smartphone sensors and perform vibration screening for faults both in aircraft and railway lines~\cite{anguita2013public, HanlyWhy}.
 
+We plot the FFT representations of \aout corresponding to different faults in {\bfseries Figs.~\ref{fig:classI_fault_freq}--~\ref{fig:classV_fault_freq}} as compared to a working sensor, all under the presence of an obstacle. The y-axis plots magnitude of FFT coefficients and the x-axis plots frequencies in the human range of motion (0 -- 10 Hz). In case of a working sensor, we observe 2 big peaks and additional peripheral frequencies up to 4 Hz. We now study how the frequency spectrum varies depending on the type of faults.
 
-
-
-
-
+\textbf{Class I faults}  %
+We observe in \textbf{Fig.~\ref{fig:classI_fault_freq}} that a dislodged lens cap (either partial or complete) leads to reduced information capture (lower bandwidth) and as a result, the sensitivity in the periphery of the sensors reduces. Note that there is just a single prominent peak in the faulty sensor (at a slightly lower frequency when compared to the normal sensor) that corresponds to the obstacle being perfectly aligned with the center of sensor as it passes. The magnitude reduces sharply as it moves away from the center of the sensor. %
 
 \begin{figure}%
 	\centering
@@ -154,24 +157,13 @@ However, we note that using the variance of \aout is not viable in all practical
 	\caption{\footnotesize{Frequency Domain Representations} of \aout under different faults in a PIR sensor. Only frequencies upto 10 Hz are shown as most PIR sensors detect human motion within 10 Hz.}
 	\label{fig:classI-V_fault_freq}	
 \end{figure}
-\subsection{Frequency Domain Characterization} \label{subsec:freq_char} %
-We have showed \aout signal has hints about various failure scenarios. %
-To get additional insights, we transform the time domain \aout signal into frequency domain using the Fast Fourier transform (FFT) to derive robust features. FFT offers high resolution in the frequency domain and deconstructs the frequencies and harmonics present in a signal. Frequency domain representations have been used to characterize human activities using smartphone sensors and perform vibration screening for faults both in aircraft and railway lines~\cite{anguita2013public, HanlyWhy}. 
-
-We plot the FFT representations of \aout corresponding to different faults in {\bfseries Figs.~\ref{fig:classI_fault_freq}--~\ref{fig:classV_fault_freq}} as compared to a working sensor, all under the presence of an obstacle. The y-axis plots magnitude of FFT coefficients and the x-axis plots frequencies in the human range of motion (0 -- 10 Hz). In case of a working sensor, we observe 2 big peaks and additional peripheral frequencies up to 4 Hz. We now study how the frequency spectrum varies depending on the type of faults.
-
-
-\textbf{Class I faults}  %
-We observe in \textbf{Fig.~\ref{fig:classI_fault_freq}} that a dislodged lens cap (either partial or complete) leads to reduced information capture (lower bandwidth) and as a result, the sensitivity in the periphery of the sensors reduces. Note that there is just a single prominent peak in the faulty sensor (at a slightly lower frequency when compared to the normal sensor) that corresponds to the obstacle being perfectly aligned with the center of sensor as it passes. The magnitude reduces sharply as it moves away from the center of the sensor. %
 
 \textbf{Class II faults} %
 \textbf{Fig.~\ref{fig:classII_fault_freq}} plots the FFT for a sensor with deformed lens cap. 
 We note that Class II faults lead to significantly suppressed primary peaks (approx. 10 db). In addition, the peripheral frequencies are attenuated as observed in Class I. These faults can manifest itself in reduced sensor performance as some of the detection region become \textit{blind spots} for the sensor.
 
-
 \textbf{Class III faults} due to accumulation of foreign particles in the lens, lead to reduced sharpness of frequencies.
 We observe in \textbf{Fig.~\ref{fig:classIII_fault_freq}} that the degradation starts with damping of the higher frequencies. As the amount of dust increases, we observe the frequencies getting increasingly damped until the object detection starts failing.
-
 
 \textbf{Class IV faults}
 We observe in \textbf{Fig.~\ref{fig:classIV_fault_freq}} that the frequencies present in the output are heavily suppressed resulting in missed obstacle detection. This is expected since the optical filter plays a major role in filtering out the non-human range frequencies from the thermal radiation and only passing through the frequencies corresponding to the human range. The presence of oil condensation or heat sinks causes absorption of the thermal radiation resulting in insufficient heat to cause pyroelectric effect. 
@@ -181,9 +173,6 @@ easy to detect due to the absence of any prominent frequencies. Consequently, \a
 
 \noindent \textbf{Summary:} %
 Frequencies present in FFT representations of \aout provide hints regarding status (\ie working/failed) of PIR sensors.
-
-
-
 
 
 
